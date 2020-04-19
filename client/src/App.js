@@ -1,26 +1,43 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { Component } from "react";
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import Navbar from "./utilities/Navbar";
+import Login from "./components/Login";
+import Footer from "./utilities/Footer";
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+export default class App extends Component {
+  constructor() {
+    super();
+    this.state = {
+      isAuthorized: false,
+    };
+  }
+  componentDidMount() {
+    console.log("start");
+    if (sessionStorage.getItem("isAuthorized") == "yes") {
+      this.setState({ isAuthorized: true });
+    }
+  }
+  render() {
+    const isAllowed = sessionStorage.getItem("isAuthorized");
+    console.log(`isAllowed: ${isAllowed}`);
+
+    return (
+      <div className='App'>
+        <Router>
+          <div>
+            <Navbar />
+            <Route path='/' />
+            {this.state.isAuthorized ? (
+              <div></div>
+            ) : (
+              <div>
+                <Route exact path='/Login' component={Login} />
+              </div>
+            )}
+          </div>
+        </Router>
+        <Footer />
+      </div>
+    );
+  }
 }
-
-export default App;
