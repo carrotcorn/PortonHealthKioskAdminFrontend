@@ -3,11 +3,11 @@ import Avatar from "@material-ui/core/Avatar";
 import Button from "@material-ui/core/Button";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import TextField from "@material-ui/core/TextField";
-import FormControlLabel from "@material-ui/core/FormControlLabel";
-import Checkbox from "@material-ui/core/Checkbox";
-import Link from "@material-ui/core/Link";
-import Grid from "@material-ui/core/Grid";
-import Box from "@material-ui/core/Box";
+// import FormControlLabel from "@material-ui/core/FormControlLabel";
+// import Checkbox from "@material-ui/core/Checkbox";
+// import Link from "@material-ui/core/Link";
+// import Grid from "@material-ui/core/Grid";
+// import Box from "@material-ui/core/Box";
 import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
@@ -48,18 +48,31 @@ export default function Login() {
     setPassword(e.target.value);
   }
   async function handleLogin(e) {
-    const backend = new Backend('http://localhost:7001')
+    const backend = "http://localhost:7001";
 
     console.log(username);
     e.preventDefault();
-    await backend.post('/user/login', {
-      username: 'example',
-      password: 'password'
+    await fetch(backend + "/user/login", {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+        "x-csrf-token": "d88b8076-3c3f-41cf-9fc3-ca3e923c009a",
+      },
+      body: JSON.stringify({
+        username,
+        password,
+      }),
     })
-   
-    const user = await backend.get('/user/current').result
-   
-    console.log(user)
+      .then((response) => response.json())
+      .then((res) => {
+        if (res.status === "OK") {
+          sessionStorage.setItem("auth-token", res.token);
+        }
+        console.log(password);
+      })
+      .catch((e) => console.log("Unable to sign-in", e));
+  }
 
   // useEffect(() => {
   //   const script = document.createElement("script");
@@ -121,6 +134,7 @@ export default function Login() {
             variant='contained'
             color='primary'
             className={classes.submit}
+            onSubmit={handleLogin}
           >
             Sign In
           </Button>
@@ -128,5 +142,4 @@ export default function Login() {
       </div>
     </Container>
   );
-}
 }
