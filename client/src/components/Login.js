@@ -39,7 +39,7 @@ export default function Login() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
-  const BACKEND = new Backend("http://localhost:7001");
+  // const BACKEND = ("http://localhost:7001");
 
   function handleUsername(e) {
     setUsername(e.target.value);
@@ -48,41 +48,31 @@ export default function Login() {
     setPassword(e.target.value);
   }
   async function handleLogin(e) {
-    console.log(email);
+    const backend = new Backend('http://localhost:7001')
+
+    console.log(username);
     e.preventDefault();
-    await fetch(BASE_URL + "login", {
-      method: "POST",
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        email,
-        password,
-      }),
+    await backend.post('/user/login', {
+      username: 'example',
+      password: 'password'
     })
-      .then((response) => response.json())
-      .then((res) => {
-        if (res.status === "OK") {
-          sessionStorage.setItem("auth-token", res.token);
-        }
-        console.log(res.token);
-      })
-      .catch((e) => console.log("Unable to sign-in", e));
-  }
+   
+    const user = await backend.get('/user/current').result
+   
+    console.log(user)
 
-  useEffect(() => {
-    const script = document.createElement("script");
+  // useEffect(() => {
+  //   const script = document.createElement("script");
 
-    script.src = "http://localhost:7001/public/client.js%22%3E";
-    script.async = true;
+  //   script.src = "http://localhost:7001/public/client.js%22%3E";
+  //   script.async = true;
 
-    document.body.appendChild(script);
+  //   document.body.appendChild(script);
 
-    return () => {
-      document.body.removeChild(script);
-    };
-  }, []);
+  //   return () => {
+  //     document.body.removeChild(script);
+  //   };
+  // }, []);
 
   return (
     <Container component='main' maxWidth='xs'>
@@ -138,4 +128,5 @@ export default function Login() {
       </div>
     </Container>
   );
+}
 }
