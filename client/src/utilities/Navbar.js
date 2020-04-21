@@ -32,6 +32,7 @@ export default class Navbar extends Component {
             <ul>
               <li>
                 <a href='/login'>Login</a>
+                <a href='/clientList'>Client List</a>
               </li>
             </ul>
           )}

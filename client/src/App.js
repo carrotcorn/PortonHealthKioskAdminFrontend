@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import Navbar from "./utilities/Navbar";
 import Login from "./components/Login";
 import Footer from "./utilities/Footer";
+import ClientList from "./components/ClientList";
 
 export default class App extends Component {
   constructor() {
@@ -32,6 +33,7 @@ export default class App extends Component {
             ) : (
               <div>
                 <Route exact path='/Login' component={Login} />
+                <Route exact path='/ClientList' component={ClientList} />
               </div>
             )}
           </div>

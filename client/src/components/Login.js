@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import Avatar from "@material-ui/core/Avatar";
 import Button from "@material-ui/core/Button";
 import CssBaseline from "@material-ui/core/CssBaseline";
@@ -33,8 +33,56 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function SignIn() {
+export default function Login() {
   const classes = useStyles();
+
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+
+  const BACKEND = new Backend("http://localhost:7001");
+
+  function handleUsername(e) {
+    setUsername(e.target.value);
+  }
+  function handlePassword(e) {
+    setPassword(e.target.value);
+  }
+  async function handleLogin(e) {
+    console.log(email);
+    e.preventDefault();
+    await fetch(BASE_URL + "login", {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        email,
+        password,
+      }),
+    })
+      .then((response) => response.json())
+      .then((res) => {
+        if (res.status === "OK") {
+          sessionStorage.setItem("auth-token", res.token);
+        }
+        console.log(res.token);
+      })
+      .catch((e) => console.log("Unable to sign-in", e));
+  }
+
+  useEffect(() => {
+    const script = document.createElement("script");
+
+    script.src = "http://localhost:7001/public/client.js%22%3E";
+    script.async = true;
+
+    document.body.appendChild(script);
+
+    return () => {
+      document.body.removeChild(script);
+    };
+  }, []);
 
   return (
     <Container component='main' maxWidth='xs'>
@@ -44,21 +92,25 @@ export default function SignIn() {
           <LockOutlinedIcon />
         </Avatar>
         <Typography component='h1' variant='h5'>
-          Sign in
+          Login
         </Typography>
-        <form className={classes.form} noValidate>
+        <form className={classes.form} onSubmit={handleLogin} noValidate>
           <TextField
+            onChange={handleUsername}
+            value={username}
             variant='outlined'
             margin='normal'
             required
             fullWidth
-            id='email'
-            label='Email Address'
-            name='email'
-            autoComplete='email'
+            id='username'
+            label='Username'
+            name='username'
+            autoComplete='username'
             autoFocus
           />
           <TextField
+            onChange={handlePassword}
+            value={password}
             variant='outlined'
             margin='normal'
             required
