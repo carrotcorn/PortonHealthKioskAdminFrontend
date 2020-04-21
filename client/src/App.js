@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import { BrowserRouter as Router, Route } from "react-router-dom";
 import Navbar from "./utilities/Navbar";
 import Login from "./components/Login";
 import Footer from "./utilities/Footer";
@@ -14,7 +14,7 @@ export default class App extends Component {
   }
   componentDidMount() {
     console.log("start");
-    if (sessionStorage.getItem("isAuthorized") == "yes") {
+    if (sessionStorage.getItem("isAuthorized") === "yes") {
       this.setState({ isAuthorized: true });
     }
   }

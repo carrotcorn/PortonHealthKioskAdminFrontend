@@ -8,7 +8,7 @@ export default class Navbar extends Component {
     };
   }
   componentWillMount() {
-    if (sessionStorage.getItem("isAuthorized") == "yes") {
+    if (sessionStorage.getItem("isAuthorized") === "yes") {
       this.setState({ isAuthorized: true });
     }
   }

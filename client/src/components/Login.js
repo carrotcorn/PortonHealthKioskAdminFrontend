@@ -3,11 +3,6 @@ import Avatar from "@material-ui/core/Avatar";
 import Button from "@material-ui/core/Button";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import TextField from "@material-ui/core/TextField";
-// import FormControlLabel from "@material-ui/core/FormControlLabel";
-// import Checkbox from "@material-ui/core/Checkbox";
-// import Link from "@material-ui/core/Link";
-// import Grid from "@material-ui/core/Grid";
-// import Box from "@material-ui/core/Box";
 import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
@@ -48,44 +43,31 @@ export default function Login() {
     setPassword(e.target.value);
   }
   async function handleLogin(e) {
-    const backend = "http://localhost:7001";
+    // const backend = new Backend("http://localhost:7001");
+    const BASE_URL = "http://localhost:7001";
 
     console.log(username);
     e.preventDefault();
-    await fetch(backend + "/user/login", {
+    var myHeaders = new Headers();
+    myHeaders.append("Content-Type", "application/json");
+    myHeaders.append(
+      "Cookie",
+      "EGG_SESS=DFXZpcM31bRAT37S2_AoV3e_rCJWbmBs42EshRLqz_HO84LJkupAfuZx03L0O3D-x9gHfxn3UplF38lobVXEn9VumLLoF9HFrygwTAWbk5P79ZigWk5ids1pRWM-QQQNvP5mTjYH1DXZ_8sEDDnyiN20qdPp_s51Z9tdU2MVJA0TD4K3ObejENNB9mUWMS6kkWHoxlbZVx57zX2q7crt1FYP3_XuHtrcPRpMtPNGepe_lklxZPZ-KPbxRmuzDDTV2Z1TwIhow48gkCg_tqNTa_RC55qRvtMRnt6GeUgGXU9vl-JflW-nmgNR1yrx_G4euxXwSWpS-K0vTEK_UqXGNgC7XQcPv8yGrjWbgZu9LgD5JiAqOmd4rObTewPMbgwf"
+    );
+    var requestOptions = {
       method: "POST",
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-        "x-csrf-token": "d88b8076-3c3f-41cf-9fc3-ca3e923c009a",
-      },
+      headers: myHeaders,
       body: JSON.stringify({
         username,
         password,
       }),
-    })
-      .then((response) => response.json())
-      .then((res) => {
-        if (res.status === "OK") {
-          sessionStorage.setItem("auth-token", res.token);
-        }
-        console.log(password);
-      })
-      .catch((e) => console.log("Unable to sign-in", e));
+      redirect: "follow",
+    };
+    fetch(BASE_URL + "/user/login", requestOptions)
+      .then((response) => response.text())
+      .then((result) => console.log(result))
+      .catch((error) => console.log("error", error));
   }
-
-  // useEffect(() => {
-  //   const script = document.createElement("script");
-
-  //   script.src = "http://localhost:7001/public/client.js%22%3E";
-  //   script.async = true;
-
-  //   document.body.appendChild(script);
-
-  //   return () => {
-  //     document.body.removeChild(script);
-  //   };
-  // }, []);
 
   return (
     <Container component='main' maxWidth='xs'>
@@ -124,10 +106,6 @@ export default function Login() {
             id='password'
             autoComplete='current-password'
           />
-          {/* <FormControlLabel
-            control={<Checkbox value='remember' color='primary' />}
-            label='Remember me'
-          /> */}
           <Button
             type='submit'
             fullWidth
