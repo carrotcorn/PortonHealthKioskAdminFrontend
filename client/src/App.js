@@ -5,7 +5,7 @@ import Login from "./components/Login";
 import Footer from "./utilities/Footer";
 import AppointmentList from "./components/AppointmentList";
 import ClinicList from "./components/ClinicList";
-import AddClinic from "./components/AddClinic";
+// import AddClinic from "./components/AddClinic";
 
 export default class App extends Component {
   constructor() {
@@ -41,7 +41,7 @@ export default class App extends Component {
                   component={AppointmentList}
                 />
                 <Route exact path='/ClinicList' component={ClinicList} />
-                <Route exact path='/AddClinic' component={AddClinic} />
+                {/* <Route exact path='/AddClinic' component={AddClinic} /> */}
               </div>
             )}
           </div>
