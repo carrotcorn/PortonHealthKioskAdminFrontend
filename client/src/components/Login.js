@@ -43,7 +43,6 @@ export default function Login() {
     setPassword(e.target.value);
   }
   async function handleLogin(e) {
-    // const backend = new Backend("http://localhost:7001");
     const BASE_URL = "http://localhost:7001";
 
     console.log(username);

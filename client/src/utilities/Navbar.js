@@ -32,7 +32,10 @@ export default class Navbar extends Component {
             <ul>
               <li>
                 <a href='/login'>Login</a>
-                <a href='/clientList'>Client List</a>
+                <br />
+                <a href='/appointmentlist'>Appointment List</a>
+                <br />
+                <a href='/cliniclist'>Clinic List</a>
               </li>
             </ul>
           )}

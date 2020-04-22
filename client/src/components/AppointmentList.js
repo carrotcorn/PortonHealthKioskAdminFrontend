@@ -26,7 +26,7 @@ const rows = [
   createData("1:00pm", "Mr.Pitt", "Dr.Oz"),
 ];
 
-export default function DenseTable() {
+export default function AppointmentList() {
   const classes = useStyles();
 
   return (
