@@ -14,19 +14,19 @@ const useStyles = makeStyles({
   },
 });
 
-function createData(time, name, doctor, status) {
-  return { time, name, doctor, status };
+function createData(name, address) {
+  return { name, address };
 }
 
 const rows = [
-  createData("11:30am", "Judy Dentch", "Dr.Baker"),
-  createData("12:00pm", "Mike Judge", "Dr.Baker"),
-  createData("12:30pm", "George Costanza", "Dr.Baker"),
-  createData("12:30pm", "Cosmo Kramer", "Dr.Oz"),
-  createData("1:00pm", "Mr.Pitt", "Dr.Oz"),
+  createData("Saint Stephens Family Clinic", "142 Lancaster Ave."),
+  createData("Payton Manning Memorial", "888 Football Hwy."),
+  createData("Mike's Dental", "9347 Lotion Rd."),
+  createData("Mickey's Physio", "666 Hell Crst."),
+  createData("Witch Doctor's Chiropractic", "$$$ Money Ave."),
 ];
 
-export default function AppointmentList() {
+export default function ClinicList() {
   const classes = useStyles();
 
   return (
@@ -34,19 +34,17 @@ export default function AppointmentList() {
       <Table className={classes.table} size='small' aria-label='a dense table'>
         <TableHead>
           <TableRow>
-            <TableCell>Time</TableCell>
-            <TableCell align='right'>Name</TableCell>
-            <TableCell align='right'>Doctor</TableCell>
+            <TableCell>Clinic Name</TableCell>
+            <TableCell align='right'>Address</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
           {rows.map((row) => (
-            <TableRow key={row.time}>
+            <TableRow key={row.name}>
               <TableCell component='th' scope='row'>
-                {row.time}
+                {row.name}
               </TableCell>
-              <TableCell align='right'>{row.name}</TableCell>
-              <TableCell align='right'>{row.doctor}</TableCell>
+              <TableCell align='right'>{row.address}</TableCell>
             </TableRow>
           ))}
         </TableBody>
