@@ -48,6 +48,7 @@ export default function Login() {
     console.log(username);
     e.preventDefault();
     var myHeaders = new Headers();
+    myHeaders.append("Accept", "application/json");
     myHeaders.append("Content-Type", "application/json");
     myHeaders.append(
       "Cookie",
