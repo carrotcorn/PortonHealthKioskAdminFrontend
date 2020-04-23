@@ -56,9 +56,9 @@ export default function ClinicList() {
           </TableBody>
         </Table>
       </TableContainer>
-      <Button variant='contained' color='primary' href='./AddClinic.js'>
+      {/* <Button variant='contained' color='primary' href='./AddClinic.js'>
         Add Clinic
-      </Button>
+      </Button> */}
     </div>
   );
 }

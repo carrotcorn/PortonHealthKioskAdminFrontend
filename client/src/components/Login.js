@@ -65,8 +65,16 @@ export default function Login() {
     };
     fetch(BASE_URL + "/user/login", requestOptions)
       .then((response) => response.text())
-      .then((result) => console.log(result))
-      .catch((error) => console.log("error", error));
+      .then((result) => {
+        if (result.status === "OK") {
+
+          sessionStorage.setItem("isAuthorized", "yes");
+          window.location.reload(false);
+        }
+
+        console.log(result);
+      })
+      .catch((error) => console.log("Unable to sign in", error));
   }
 
   return (

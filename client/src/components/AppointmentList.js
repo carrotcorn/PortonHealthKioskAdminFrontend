@@ -19,11 +19,11 @@ function createData(time, name, doctor, status) {
 }
 
 const rows = [
-  createData("11:30am", "Judy Dentch", "Dr.Baker"),
-  createData("12:00pm", "Mike Judge", "Dr.Baker"),
-  createData("12:30pm", "George Costanza", "Dr.Baker"),
-  createData("12:30pm", "Cosmo Kramer", "Dr.Oz"),
-  createData("1:00pm", "Mr.Pitt", "Dr.Oz"),
+  createData("11:30am", "Judy Dentch", "Dr.Baker", "Completed"),
+  createData("12:00pm", "Mike Judge", "Dr.Baker", "Checked-In"),
+  createData("12:30pm", "George Costanza", "Dr.Baker", "Pending"),
+  createData("12:30pm", "Cosmo Kramer", "Dr.Oz", "Pending"),
+  createData("1:00pm", "Mr.Pitt", "Dr.Oz", "Pending"),
 ];
 
 export default function AppointmentList() {
@@ -37,6 +37,7 @@ export default function AppointmentList() {
             <TableCell>Time</TableCell>
             <TableCell align='right'>Name</TableCell>
             <TableCell align='right'>Doctor</TableCell>
+            <TableCell align='right'>Status</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -47,6 +48,7 @@ export default function AppointmentList() {
               </TableCell>
               <TableCell align='right'>{row.name}</TableCell>
               <TableCell align='right'>{row.doctor}</TableCell>
+              <TableCell align='right'>{row.status}</TableCell>
             </TableRow>
           ))}
         </TableBody>
