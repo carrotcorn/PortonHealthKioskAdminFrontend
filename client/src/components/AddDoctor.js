@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Button from "@material-ui/core/Button";
+import Typography from "@material-ui/core/Typography";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import TextField from "@material-ui/core/TextField";
 import { makeStyles } from "@material-ui/core/styles";
@@ -34,14 +35,17 @@ export default function AddDoctor() {
     setEmail(e.target.value);
   }
 
-  async function createDoctor(e) {
+  async function createDoctor() {
     const BASE_URL = "http://localhost:7001";
 
-
-    e.preventDefault();
+    // e.preventDefault();
     var myHeaders = new Headers();
     myHeaders.append("Accept", "application/json");
     myHeaders.append("Content-Type", "application/json");
+    myHeaders.append(
+      "Access-Control-Allow-Headers",
+      "Origin, X-Requested-With, Content-Type, Accept"
+    );
     myHeaders.append(
       "Cookie",
       "EGG_SESS=DFXZpcM31bRAT37S2_AoV3e_rCJWbmBs42EshRLqz_HO84LJkupAfuZx03L0O3D-x9gHfxn3UplF38lobVXEn9VumLLoF9HFrygwTAWbk5P79ZigWk5ids1pRWM-QQQNvP5mTjYH1DXZ_8sEDDnyiN20qdPp_s51Z9tdU2MVJA0TD4K3ObejENNB9mUWMS6kkWHoxlbZVx57zX2q7crt1FYP3_XuHtrcPRpMtPNGepe_lklxZPZ-KPbxRmuzDDTV2Z1TwIhow48gkCg_tqNTa_RC55qRvtMRnt6GeUgGXU9vl-JflW-nmgNR1yrx_G4euxXwSWpS-K0vTEK_UqXGNgC7XQcPv8yGrjWbgZu9LgD5JiAqOmd4rObTewPMbgwf"
@@ -50,8 +54,9 @@ export default function AddDoctor() {
       doctorname,
       phone,
       email,
+      key: "d88b8076-3c3f-41cf-9fc3-ca3e923c009a",
     });
-
+    console.log("p00");
     var requestOptions = {
       method: "POST",
       headers: myHeaders,
@@ -65,12 +70,15 @@ export default function AddDoctor() {
   }
   useEffect(() => {
     createDoctor();
-  });
+  }, []);
 
   return (
     <div className={classes.root}>
       <div>
-        <form className={classes.form} onSubmit={createDoctor} noValidate>
+        <Typography component='h1' variant='h5'>
+          Add Doctor
+        </Typography>
+        <form className={classes.form} noValidate>
           <TextField
             onChange={handleDoctorname}
             value={doctorname}
@@ -91,11 +99,11 @@ export default function AddDoctor() {
             margin='normal'
             required
             fullWidth
-            name='address'
-            label='Address'
-            type='address'
-            id='address'
-            autoComplete='current-address'
+            name='phone'
+            label='Phone Number'
+            type='phone'
+            id='phone'
+            autoComplete='current-phone'
           />
           <TextField
             onChange={handleEmail}
@@ -116,7 +124,6 @@ export default function AddDoctor() {
             variant='contained'
             color='primary'
             className={classes.submit}
-            onSubmit={createDoctor}
           >
             Create Doctor
           </Button>
@@ -124,55 +131,4 @@ export default function AddDoctor() {
       </div>
     </div>
   );
-  //   return (
-  //     <Container component='main' maxWidth='xs'>
-  //       <CssBaseline />
-  //       <div className={classes.paper}>
-  //         <Avatar className={classes.avatar}>
-  //           <LockOutlinedIcon />
-  //         </Avatar>
-  //         <Typography component='h1' variant='h5'>
-  //           Login
-  //         </Typography>
-  //         <form className={classes.form} onSubmit={handleLogin} noValidate>
-  //           <TextField
-  //             onChange={handleUsername}
-  //             value={username}
-  //             variant='outlined'
-  //             margin='normal'
-  //             required
-  //             fullWidth
-  //             id='username'
-  //             label='Username'
-  //             name='username'
-  //             autoComplete='username'
-  //             autoFocus
-  //           />
-  //           <TextField
-  //             onChange={handlePassword}
-  //             value={password}
-  //             variant='outlined'
-  //             margin='normal'
-  //             required
-  //             fullWidth
-  //             name='password'
-  //             label='Password'
-  //             type='password'
-  //             id='password'
-  //             autoComplete='current-password'
-  //           />
-  //           <Button
-  //             type='submit'
-  //             fullWidth
-  //             variant='contained'
-  //             color='primary'
-  //             className={classes.submit}
-  //             onSubmit={handleLogin}
-  //           >
-  //             Sign In
-  //           </Button>
-  //         </form>
-  //       </div>
-  //     </Container>
-  //   );
 }

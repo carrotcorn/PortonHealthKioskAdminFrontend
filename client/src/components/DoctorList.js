@@ -92,7 +92,7 @@ export default function DoctorList() {
           </TableBody>
         </Table>
       </TableContainer>
-      <Button variant='contained' color='primary' href='./AddDoctor.js'>
+      <Button variant='contained' color='primary' href='./adddoctor'>
         Add Doctor
       </Button>
     </div>
