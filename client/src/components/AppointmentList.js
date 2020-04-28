@@ -47,7 +47,7 @@ export default function AppointmentList() {
         // console.log(typeof theAppointments);
         if (theAppointments.success) {
           setListAppointments(theAppointments.result); //this allows me to not throw an error when running
-          console.log(listAppointment);
+          console.log(JSON.stringify(listAppointment));
         }
       })
       .catch((error) => console.log("error", error));
@@ -62,17 +62,18 @@ export default function AppointmentList() {
         <TableHead>
           <TableRow>
             <TableCell>Time</TableCell>
-            <TableCell align='right'>familyName</TableCell>
-            <TableCell align='right'>givenName</TableCell>
-            <TableCell align='right'>age</TableCell>
-            <TableCell align='right'>phone</TableCell>
-            <TableCell align='right'>checkedIn</TableCell>
+            <TableCell align='right'>Family Name</TableCell>
+            <TableCell align='right'>Given Name</TableCell>
+            <TableCell align='right'>Age</TableCell>
+            <TableCell align='right'>Phone</TableCell>
+            <TableCell align='right'>Checked-In</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
           {listAppointment &&
             listAppointment.map((row) => {
               return (
+                //this return in necessary
                 <TableRow key={listAppointment.time}>
                   <TableCell component='th' scope='row'>
                     {listAppointment.time}

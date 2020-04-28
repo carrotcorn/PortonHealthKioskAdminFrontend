@@ -48,6 +48,7 @@ export default function Login() {
     console.log(username);
     e.preventDefault();
     var myHeaders = new Headers();
+    myHeaders.append("x-csrf-token", "xZy6P8To-gHQQAzq_ngDBev5P3pZbmK_1KiE");
     myHeaders.append("Accept", "application/json");
     myHeaders.append("Content-Type", "application/json");
     myHeaders.append(
@@ -60,6 +61,7 @@ export default function Login() {
       body: JSON.stringify({
         username,
         password,
+        "key":"d88b8076-3c3f-41cf-9fc3-ca3e923c009a"
       }),
       redirect: "follow",
     };
@@ -67,7 +69,6 @@ export default function Login() {
       .then((response) => response.text())
       .then((result) => {
         if (result.status === "OK") {
-
           sessionStorage.setItem("isAuthorized", "yes");
           window.location.reload(false);
         }

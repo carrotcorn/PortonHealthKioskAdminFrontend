@@ -25,16 +25,9 @@ export default function DoctorList() {
 
     var myHeaders = new Headers();
     myHeaders.append("Accept", "application/json");
+    myHeaders.append("x-csrf-token", "xZy6P8To-gHQQAzq_ngDBev5P3pZbmK_1KiE");
     myHeaders.append("Content-Type", "application/json");
-    myHeaders.append("Access-Control-Allow-Origin", "*");
-    myHeaders.append(
-      "Access-Control-Allow-Headers",
-      "Origin, X-Requested-With, Content-Type, Accept"
-    );
-    myHeaders.append(
-      "Cookie",
-      "EGG_SESS=DFXZpcM31bRAT37S2_AoV3e_rCJWbmBs42EshRLqz_HO84LJkupAfuZx03L0O3D-x9gHfxn3UplF38lobVXEn9VumLLoF9HFrygwTAWbk5P79ZigWk5ids1pRWM-QQQNvP5mTjYH1DXZ_8sEDDnyiN20qdPp_s51Z9tdU2MVJA0TD4K3ObejENNB9mUWMS6kkWHoxlbZVx57zX2q7crt1FYP3_XuHtrcPRpMtPNGepe_lklxZPZ-KPbxRmuzDDTV2Z1TwIhow48gkCg_tqNTa_RC55qRvtMRnt6GeUgGXU9vl-JflW-nmgNR1yrx_G4euxXwSWpS-K0vTEK_UqXGNgC7XQcPv8yGrjWbgZu9LgD5JiAqOmd4rObTewPMbgwf"
-    );
+    myHeaders.append("Cookie", "EGG_SESS=iFwruczMLmxEyMIWRWfDddoZIoFEcl8trLYHNMSpwFT5YK94gOPrnqE2ST8f5qsmTFmXchmpDl5lkGktuhuNZtaDsSuewBc1SjXheYxfPIvKMSWTmznPrzRWLNLLHZ-3PSyVMGWIp9x6fnoG4Fjr_LghpfkKyMwsrl00hj1CwqFgqh0TpuM6uF_VaUyrbFFpav955v9VprToaWQQmKE4jhLUrE1FoWwTbDT44o4WAkwA2-bbpTboLxPRTCI3Lt7oUjC9tFA4-xxKxPvY0GYWOIFtum0yX4fRgK1dwCqEy4GTRxTgZvwQ8aIs5zpGjtOsFnV3M6CSmFMd2ww9_y0Q1nUmM5NLQ-gGSbiTMLsn1T8cEILldqMDtD0ct1D_9F_Qp8EwnwW4_mqZk1kAkRA6HpRWGvJ5p-DO7IvPle2ZRj_rk6rIet1R07pTalJlu0Efw8lpITnl8Ihy9BY74ujtwg==");
     var requestOptions = {
       method: "GET",
       headers: myHeaders,
@@ -52,7 +45,7 @@ export default function DoctorList() {
           setListDoctors(coolDoctor.result); //this allows me to not throw an error when running
         }
         // setListDoctors(coolDoctor.result); //to properly JSON.parse, need to set var name to the result via having "variableName.result" set to the initial state
-        console.log(listDoctors);
+        console.log(setListDoctors(coolDoctor.result));
       })
       .catch((error) => console.log("error", error));
   }
@@ -92,9 +85,9 @@ export default function DoctorList() {
           </TableBody>
         </Table>
       </TableContainer>
-      <Button variant='contained' color='primary' href='./adddoctor'>
+      {/* <Button variant='contained' color='primary' href='./adddoctor'>
         Add Doctor
-      </Button>
+      </Button> */}
     </div>
   );
 }
