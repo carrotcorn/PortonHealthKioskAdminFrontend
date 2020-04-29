@@ -8,6 +8,7 @@ import ClinicList from "./components/ClinicList";
 // import AddClinic from "./components/AddClinic";
 import DoctorList from "./components/DoctorList";
 import AddDoctor from "./components/AddDoctor";
+import AdminSplash from "./components/AdminSplash";
 
 export default class App extends Component {
   constructor() {
@@ -36,7 +37,8 @@ export default class App extends Component {
               <div></div>
             ) : ( */}
             <div>
-              <Route exact path='/Login' component={Login} />
+              <Route exact path='/' component={AdminSplash} />
+              {/* <Route exact path='/Login' component={Login} /> */}
               <Route
                 exact
                 path='/AppointmentList'
