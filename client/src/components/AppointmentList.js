@@ -43,8 +43,8 @@ export default function AppointmentList() {
       .then((response) => response.text())
       .then((result) => {
         const theAppointments = JSON.parse(result);
-        console.log("cool variable", theAppointments);
-        // console.log(typeof theAppointments);
+        console.log("the appointments", theAppointments);
+         console.log(typeof theAppointments);
         if (theAppointments.success) {
           setListAppointments(theAppointments.result); //this allows me to not throw an error when running
           console.log(JSON.stringify(listAppointment));
@@ -61,7 +61,8 @@ export default function AppointmentList() {
       <Table className={classes.table} size='small' aria-label='a dense table'>
         <TableHead>
           <TableRow>
-            <TableCell>Time</TableCell>
+            <TableCell>Start Time</TableCell>
+            <TableCell align='right'>End Time</TableCell>
             <TableCell align='right'>Family Name</TableCell>
             <TableCell align='right'>Given Name</TableCell>
             <TableCell align='right'>Age</TableCell>
@@ -74,21 +75,17 @@ export default function AppointmentList() {
             listAppointment.map((row) => {
               return (
                 //this return in necessary
-                <TableRow key={listAppointment.time}>
+                <TableRow key={row.startTime}>
                   <TableCell component='th' scope='row'>
-                    {listAppointment.time}
+                    {row.startTime}
                   </TableCell>
-                  <TableCell align='right'>
-                    {listAppointment.familyName}
-                  </TableCell>
-                  <TableCell align='right'>
-                    {listAppointment.givenName}
-                  </TableCell>
-                  <TableCell align='right'>{listAppointment.age}</TableCell>
-                  <TableCell align='right'>{listAppointment.phone}</TableCell>
-                  <TableCell align='right'>
-                    {listAppointment.checkedIn}
-                  </TableCell>
+                  <TableCell align='right'>{row.endTime}</TableCell>
+
+                  <TableCell align='right'>{row.familyName}</TableCell>
+                  <TableCell align='right'>{row.givenName}</TableCell>
+                  <TableCell align='right'>{row.age}</TableCell>
+                  <TableCell align='right'>{row.phone}</TableCell>
+                  <TableCell align='right'>{row.checkedIn ? "Checked-In" : "Not Checked-In"}</TableCell>
                 </TableRow>
               );
             })}
