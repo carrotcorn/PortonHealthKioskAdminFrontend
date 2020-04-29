@@ -76,7 +76,7 @@ export default function SimpleCard() {
       <Card className={classes.root}>
         <CardContent>
           <Typography variant='h5' component='h2'>
-            Phone Number Into Check-In
+            Add Phone Number Into Check-In
           </Typography>
         </CardContent>
         <CardActions>
