@@ -1,8 +1,14 @@
 import React, { Component } from "react";
-import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import { BrowserRouter as Router, Route } from "react-router-dom";
 import Navbar from "./utilities/Navbar";
 import Login from "./components/Login";
 import Footer from "./utilities/Footer";
+import AppointmentList from "./components/AppointmentList";
+import ClinicList from "./components/ClinicList";
+// import AddClinic from "./components/AddClinic";
+import DoctorList from "./components/DoctorList";
+import AddDoctor from "./components/AddDoctor";
+import AdminSplash from "./components/AdminSplash";
 
 export default class App extends Component {
   constructor() {
@@ -13,7 +19,7 @@ export default class App extends Component {
   }
   componentDidMount() {
     console.log("start");
-    if (sessionStorage.getItem("isAuthorized") == "yes") {
+    if (sessionStorage.getItem("isAuthorized") === "yes") {
       this.setState({ isAuthorized: true });
     }
   }
@@ -27,13 +33,22 @@ export default class App extends Component {
           <div>
             <Navbar />
             <Route path='/' />
-            {this.state.isAuthorized ? (
+            {/* {this.state.isAuthorized ? (
               <div></div>
-            ) : (
-              <div>
-                <Route exact path='/Login' component={Login} />
-              </div>
-            )}
+            ) : ( */}
+            <div>
+              <Route exact path='/' component={AdminSplash} />
+              {/* <Route exact path='/Login' component={Login} /> */}
+              <Route
+                exact
+                path='/AppointmentList'
+                component={AppointmentList}
+              />
+              <Route exact path='/ClinicList' component={ClinicList} />
+              <Route exact path='/DoctorList' component={DoctorList} />
+              <Route exact path='/AddDoctor' component={AddDoctor} />
+            </div>
+            {/* )} */}
           </div>
         </Router>
         <Footer />
