@@ -1,31 +1,33 @@
-import React, { Component } from "react";
-import { BrowserRouter as Router, Route } from "react-router-dom";
-import Navbar from "./utilities/Navbar";
-import Login from "./components/Login";
-import Footer from "./utilities/Footer";
-import AppointmentList from "./components/AppointmentList";
-import ClinicList from "./components/ClinicList";
+import React, { Component } from 'react';
+import { BrowserRouter as Router, Route } from 'react-router-dom';
+import Navbar from './utilities/Navbar';
+import Login from './components/Login';
+import Footer from './utilities/Footer';
+import AppointmentList from './components/AppointmentList';
+import ClinicList from './components/ClinicList';
 // import AddClinic from "./components/AddClinic";
-import DoctorList from "./components/DoctorList";
-import AddDoctor from "./components/AddDoctor";
-import AdminSplash from "./components/AdminSplash";
+import DoctorList from './components/DoctorList';
+import AddDoctor from './components/AddDoctor';
+import AdminSplash from './components/AdminSplash';
 
 export default class App extends Component {
-  constructor() {
-    super();
+  constructor () {
+    super()
     this.state = {
-      isAuthorized: false,
-    };
-  }
-  componentDidMount() {
-    console.log("start");
-    if (sessionStorage.getItem("isAuthorized") === "yes") {
-      this.setState({ isAuthorized: true });
+      isAuthorized: false
     }
   }
-  render() {
-    const isAllowed = sessionStorage.getItem("isAuthorized");
-    console.log(`isAllowed: ${isAllowed}`);
+
+  componentDidMount () {
+    console.log('start')
+    if (sessionStorage.getItem('isAuthorized') === 'yes') {
+      this.setState({ isAuthorized: true })
+    }
+  }
+
+  render () {
+    const isAllowed = sessionStorage.getItem('isAuthorized')
+    console.log(`isAllowed: ${isAllowed}`)
 
     return (
       <div className='App'>
@@ -38,7 +40,7 @@ export default class App extends Component {
             ) : ( */}
             <div>
               <Route exact path='/' component={AdminSplash} />
-              {/* <Route exact path='/Login' component={Login} /> */}
+              <Route exact path='/Login' component={Login} />
               <Route
                 exact
                 path='/AppointmentList'
@@ -53,6 +55,6 @@ export default class App extends Component {
         </Router>
         <Footer />
       </div>
-    );
+    )
   }
 }
