@@ -20,9 +20,9 @@ export default function DoctorList() {
 
   const [listDoctors, setListDoctors] = useState([]);
 
-  async function getDoctors() {
-    // const BASE_URL = "http://localhost:7001";
+  const BASE_URL = "http://localhost:7001";
 
+  async function getDoctors() {
     var myHeaders = new Headers();
     myHeaders.append("Accept", "application/json");
     myHeaders.append("Content-Type", "application/json");
@@ -36,7 +36,7 @@ export default function DoctorList() {
       redirect: "follow",
     };
     console.log("REQUEST:", requestOptions);
-    fetch("http://localhost:7001/public/doctor/find", requestOptions)
+    fetch(BASE_URL + "/public/doctor/find", requestOptions)
       .then((response) => response.text())
       .then((result) => {
         const coolDoctor = JSON.parse(result);
