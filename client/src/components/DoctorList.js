@@ -36,15 +36,15 @@ export default function DoctorList() {
       redirect: "follow",
     };
     console.log("REQUEST:", requestOptions);
-    fetch("http://localhost:7001/clinic/getdoctor", requestOptions)
+    fetch("http://localhost:7001/public/doctor/find", requestOptions)
       .then((response) => response.text())
       .then((result) => {
         const coolDoctor = JSON.parse(result);
         console.log("cool doctors", coolDoctor);
         console.log(typeof coolDoctor);
         if (coolDoctor.success) {
-           setListDoctors(coolDoctor.result); //this allows me to not throw an error when running
-         }
+          setListDoctors(coolDoctor.result); //this allows me to not throw an error when running
+        }
         //setListDoctors(coolDoctor.result); //to properly JSON.parse, need to set var name to the result via having "variableName.result" set to the initial state
         // console.log(setListDoctors(coolDoctor.result));
       })
@@ -86,9 +86,9 @@ export default function DoctorList() {
           </TableBody>
         </Table>
       </TableContainer>
-      {/* <Button variant='contained' color='primary' href='./adddoctor'>
+      <Button variant='contained' color='primary' href='./adddoctor'>
         Add Doctor
-      </Button> */}
+      </Button>
     </div>
   );
 }

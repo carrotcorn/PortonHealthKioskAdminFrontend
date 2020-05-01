@@ -29,7 +29,7 @@ export default function CenteredTabs() {
         textColor='primary'
         centered
       >
-        {/* <Tab label='Login' href='/login' /> */}
+        <Tab label='Login' href='/login' />
         <Tab label='Appointment List' href='/appointmentlist' />
         <Tab label='Clinic List' href='/cliniclist' />
         <Tab label='Doctor List' href='/doctorlist' />

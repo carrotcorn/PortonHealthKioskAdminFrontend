@@ -17,14 +17,16 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function Login() {
+export default function AddClinic() {
   const classes = useStyles();
 
   const [name, setClinicName] = useState("");
   const [phone, setPhone] = useState("");
   const [email, setEmail] = useState("");
-  const [address, setAddress] = useState([]);
-  const [ownerId, setOwnerId] = useState("");
+  const [streetAddress, setStreetAddress] = useState("");
+  const [city, setCity] = useState("");
+  const [postcode, setPostcode] = useState("");
+  // const [ownerId, setOwnerId] = useState("");
 
   function handleClinicName(e) {
     setClinicName(e.target.value);
@@ -35,12 +37,18 @@ export default function Login() {
   function handleEmail(e) {
     setEmail(e.target.value);
   }
-  function handleAddress(e) {
-    setAddress(e.target.value);
+  function handleStreetAddress(e) {
+    setStreetAddress(e.target.value);
   }
-  function handleOwnerId(e) {
-    setOwnerId(e.target.value);
+  function handleCity(e) {
+    setCity(e.target.value);
   }
+  function handlePostcode(e) {
+    setPostcode(e.target.value);
+  }
+  // function handleOwnerId(e) {
+  //   setOwnerId(e.target.value);
+  // }
 
   async function handleClinicCreate(e) {
     const BASE_URL = "http://localhost:7001";
@@ -58,8 +66,10 @@ export default function Login() {
       name,
       phone,
       email,
-      address: { street, city, province, country, postcode },
-      ownerId,
+      streetAddress,
+      city,
+      postcode,
+      // ownerId,
     });
 
     var requestOptions = {
@@ -73,6 +83,7 @@ export default function Login() {
       .then((result) => console.log(result))
       .catch((error) => console.log("error", error));
   }
+
   return (
     <div className={classes.root}>
       <div>
@@ -80,10 +91,10 @@ export default function Login() {
           onChange={handleClinicName}
           value={name}
           id='standard-full-width'
-          label='Label'
+          // label='Legal Clinic Name'
           style={{ margin: 8 }}
-          placeholder='Placeholder'
-          helperText='Full width!'
+          placeholder='Clinic Name'
+          // helperText='Full width!'
           fullWidth
           margin='normal'
           InputLabelProps={{
@@ -93,32 +104,32 @@ export default function Login() {
         <TextField
           onChange={handlePhone}
           value={phone}
-          label='None'
+          label='Phone'
           id='margin-none'
           defaultValue='Default Value'
           className={classes.textField}
-          helperText='Some important text'
+          helperText='in (xxx)-ccc-vvvv format'
         />
         <TextField
           onChange={handleEmail}
           value={email}
-          label='Dense'
+          label='Email'
           id='margin-dense'
           defaultValue='Default Value'
           className={classes.textField}
-          helperText='Some important text'
+          helperText='In "placeholder@whatever.com" format'
           margin='dense'
         />
       </div>
       <div>
         <TextField
-          onChange={handleAddress}
-          value={address}
+          onChange={handleStreetAddress}
+          value={streetAddress}
           id='filled-full-width'
-          label='Label'
+          label='Street Address'
           style={{ margin: 8 }}
-          placeholder='Placeholder'
-          helperText='Full width!'
+          // placeholder='Street Address'
+          // helperText='Full width!'
           fullWidth
           margin='normal'
           InputLabelProps={{
@@ -127,124 +138,37 @@ export default function Login() {
           variant='filled'
         />
         <TextField
-          label='None'
+          onChange={handleCity}
+          value={city}
+          label='City'
           id='filled-margin-none'
           defaultValue='Default Value'
           className={classes.textField}
-          helperText='Some important text'
+          // helperText='Some important text'
           variant='filled'
         />
         <TextField
-          label='Dense'
+          onChange={handlePostcode}
+          value={postcode}
+          label='Postal Code'
           id='filled-margin-dense'
           defaultValue='Default Value'
           className={classes.textField}
-          helperText='Some important text'
+          helperText='in A1A-2B2 format'
           margin='dense'
           variant='filled'
-        />
-        <TextField
-          label='Normal'
-          id='filled-margin-normal'
-          defaultValue='Default Value'
-          className={classes.textField}
-          helperText='Some important text'
-          margin='normal'
-          variant='filled'
-        />
+        /> 
+        <Button
+        type='submit'
+        fullWidth
+        variant='contained'
+        color='primary'
+        className={classes.submit}
+      >
+        Create Clinic
+      </Button>
       </div>
-      <div>
-        <TextField
-          id='outlined-full-width'
-          label='Label'
-          style={{ margin: 8 }}
-          placeholder='Placeholder'
-          helperText='Full width!'
-          fullWidth
-          margin='normal'
-          InputLabelProps={{
-            shrink: true,
-          }}
-          variant='outlined'
-        />
-        <TextField
-          label='None'
-          id='outlined-margin-none'
-          defaultValue='Default Value'
-          className={classes.textField}
-          helperText='Some important text'
-          variant='outlined'
-        />
-        <TextField
-          label='Dense'
-          id='outlined-margin-dense'
-          defaultValue='Default Value'
-          className={classes.textField}
-          helperText='Some important text'
-          margin='dense'
-          variant='outlined'
-        />
-        <TextField
-          label='Normal'
-          id='outlined-margin-normal'
-          defaultValue='Default Value'
-          className={classes.textField}
-          helperText='Some important text'
-          margin='normal'
-          variant='outlined'
-        />
-      </div>
+     
     </div>
   );
-  //   return (
-  //     <Container component='main' maxWidth='xs'>
-  //       <CssBaseline />
-  //       <div className={classes.paper}>
-  //         <Avatar className={classes.avatar}>
-  //           <LockOutlinedIcon />
-  //         </Avatar>
-  //         <Typography component='h1' variant='h5'>
-  //           Login
-  //         </Typography>
-  //         <form className={classes.form} onSubmit={handleLogin} noValidate>
-  //           <TextField
-  //             onChange={handleUsername}
-  //             value={username}
-  //             variant='outlined'
-  //             margin='normal'
-  //             required
-  //             fullWidth
-  //             id='username'
-  //             label='Username'
-  //             name='username'
-  //             autoComplete='username'
-  //             autoFocus
-  //           />
-  //           <TextField
-  //             onChange={handlePassword}
-  //             value={password}
-  //             variant='outlined'
-  //             margin='normal'
-  //             required
-  //             fullWidth
-  //             name='password'
-  //             label='Password'
-  //             type='password'
-  //             id='password'
-  //             autoComplete='current-password'
-  //           />
-  //           <Button
-  //             type='submit'
-  //             fullWidth
-  //             variant='contained'
-  //             color='primary'
-  //             className={classes.submit}
-  //             onSubmit={handleLogin}
-  //           >
-  //             Sign In
-  //           </Button>
-  //         </form>
-  //       </div>
-  //     </Container>
-  //   );
 }
