@@ -20,31 +20,31 @@ export default function DoctorList() {
 
   const [listDoctors, setListDoctors] = useState([]);
 
-  async function getDoctors() {
-    // const BASE_URL = "http://localhost:7001";
+  const BASE_URL = "http://localhost:7001";
 
+  async function getDoctors() {
     var myHeaders = new Headers();
     myHeaders.append("Accept", "application/json");
     myHeaders.append("Content-Type", "application/json");
-    myHeaders.append(
-      "Cookie",
-      "EGG_SESS=iFwruczMLmxEyMIWRWfDddoZIoFEcl8trLYHNMSpwFT5YK94gOPrnqE2ST8f5qsmTFmXchmpDl5lkGktuhuNZtaDsSuewBc1SjXheYxfPIvKMSWTmznPrzRWLNLLHZ-3PSyVMGWIp9x6fnoG4Fjr_LghpfkKyMwsrl00hj1CwqFgqh0TpuM6uF_VaUyrbFFpav955v9VprToaWQQmKE4jhLUrE1FoWwTbDT44o4WAkwA2-bbpTboLxPRTCI3Lt7oUjC9tFA4-xxKxPvY0GYWOIFtum0yX4fRgK1dwCqEy4GTRxTgZvwQ8aIs5zpGjtOsFnV3M6CSmFMd2ww9_y0Q1nUmM5NLQ-gGSbiTMLsn1T8cEILldqMDtD0ct1D_9F_Qp8EwnwW4_mqZk1kAkRA6HpRWGvJ5p-DO7IvPle2ZRj_rk6rIet1R07pTalJlu0Efw8lpITnl8Ihy9BY74ujtwg=="
-    );
+    // myHeaders.append(
+    //   "Cookie",
+    //   "EGG_SESS=iFwruczMLmxEyMIWRWfDddoZIoFEcl8trLYHNMSpwFT5YK94gOPrnqE2ST8f5qsmTFmXchmpDl5lkGktuhuNZtaDsSuewBc1SjXheYxfPIvKMSWTmznPrzRWLNLLHZ-3PSyVMGWIp9x6fnoG4Fjr_LghpfkKyMwsrl00hj1CwqFgqh0TpuM6uF_VaUyrbFFpav955v9VprToaWQQmKE4jhLUrE1FoWwTbDT44o4WAkwA2-bbpTboLxPRTCI3Lt7oUjC9tFA4-xxKxPvY0GYWOIFtum0yX4fRgK1dwCqEy4GTRxTgZvwQ8aIs5zpGjtOsFnV3M6CSmFMd2ww9_y0Q1nUmM5NLQ-gGSbiTMLsn1T8cEILldqMDtD0ct1D_9F_Qp8EwnwW4_mqZk1kAkRA6HpRWGvJ5p-DO7IvPle2ZRj_rk6rIet1R07pTalJlu0Efw8lpITnl8Ihy9BY74ujtwg=="
+    // );
     var requestOptions = {
       method: "GET",
       headers: myHeaders,
       redirect: "follow",
     };
     console.log("REQUEST:", requestOptions);
-    fetch("http://localhost:7001/clinic/getdoctor", requestOptions)
+    fetch(BASE_URL + "/public/doctor/find", requestOptions)
       .then((response) => response.text())
       .then((result) => {
         const coolDoctor = JSON.parse(result);
         console.log("cool doctors", coolDoctor);
         console.log(typeof coolDoctor);
         if (coolDoctor.success) {
-           setListDoctors(coolDoctor.result); //this allows me to not throw an error when running
-         }
+          setListDoctors(coolDoctor.result); //this allows me to not throw an error when running
+        }
         //setListDoctors(coolDoctor.result); //to properly JSON.parse, need to set var name to the result via having "variableName.result" set to the initial state
         // console.log(setListDoctors(coolDoctor.result));
       })
@@ -86,9 +86,9 @@ export default function DoctorList() {
           </TableBody>
         </Table>
       </TableContainer>
-      {/* <Button variant='contained' color='primary' href='./adddoctor'>
+      <Button variant='contained' color='primary' href='./adddoctor'>
         Add Doctor
-      </Button> */}
+      </Button>
     </div>
   );
 }
