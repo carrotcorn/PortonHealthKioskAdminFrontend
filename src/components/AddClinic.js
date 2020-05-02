@@ -1,3 +1,4 @@
+/* global Backend */
 import React, { useState } from "react";
 import Button from "@material-ui/core/Button";
 import CssBaseline from "@material-ui/core/CssBaseline";
@@ -49,39 +50,30 @@ export default function AddClinic() {
   // function handleOwnerId(e) {
   //   setOwnerId(e.target.value);
   // }
-
-  async function handleClinicCreate(e) {
+  async function createClinic(e) {
     const BASE_URL = "http://localhost:7001";
 
-    console.log(name);
     e.preventDefault();
-    var myHeaders = new Headers();
-    myHeaders.append("Accept", "application/json");
-    myHeaders.append("Content-Type", "application/json");
-    // myHeaders.append(
-    //   "Cookie",
-    //   "EGG_SESS=DFXZpcM31bRAT37S2_AoV3e_rCJWbmBs42EshRLqz_HO84LJkupAfuZx03L0O3D-x9gHfxn3UplF38lobVXEn9VumLLoF9HFrygwTAWbk5P79ZigWk5ids1pRWM-QQQNvP5mTjYH1DXZ_8sEDDnyiN20qdPp_s51Z9tdU2MVJA0TD4K3ObejENNB9mUWMS6kkWHoxlbZVx57zX2q7crt1FYP3_XuHtrcPRpMtPNGepe_lklxZPZ-KPbxRmuzDDTV2Z1TwIhow48gkCg_tqNTa_RC55qRvtMRnt6GeUgGXU9vl-JflW-nmgNR1yrx_G4euxXwSWpS-K0vTEK_UqXGNgC7XQcPv8yGrjWbgZu9LgD5JiAqOmd4rObTewPMbgwf"
-    // );
-    var raw = JSON.stringify({
-      name,
-      phone,
-      email,
-      streetAddress,
-      city,
-      postcode,
-      // ownerId,
-    });
-
-    var requestOptions = {
-      method: "POST",
-      headers: myHeaders,
-      body: raw,
-      redirect: "follow",
-    };
-    fetch(BASE_URL + "/clinic/clinic/create", requestOptions)
-      .then((response) => response.text())
-      .then((result) => console.log(result))
-      .catch((error) => console.log("error", error));
+    const backend = new Backend(BASE_URL);
+    try {
+      const result = await backend.post("/clinic/clinic/create", {
+        name,
+        phone,
+        email,
+        streetAddress,
+        city,
+        postcode,
+      });
+      if (result.success) {
+        console.log(result);
+        window.sessionStorage.setItem("isAuthorized", "yes");
+        window.location.href = "/";
+      } else {
+        window.alert(result.error.message);
+      }
+    } catch (e) {
+      console.log(e);
+    }
   }
 
   return (
@@ -91,10 +83,9 @@ export default function AddClinic() {
           onChange={handleClinicName}
           value={name}
           id='standard-full-width'
-          // label='Legal Clinic Name'
+
           style={{ margin: 8 }}
           placeholder='Clinic Name'
-          // helperText='Full width!'
           fullWidth
           margin='normal'
           InputLabelProps={{
@@ -159,6 +150,7 @@ export default function AddClinic() {
           variant='filled'
         />
         <Button
+          onSubmit={createClinic}
           type='submit'
           fullWidth
           variant='contained'
@@ -171,3 +163,36 @@ export default function AddClinic() {
     </div>
   );
 }
+// async function handleClinicCreate(e) {
+//   const BASE_URL = "http://localhost:7001";
+
+//   console.log(name);
+//   e.preventDefault();
+//   var myHeaders = new Headers();
+//   myHeaders.append("Accept", "application/json");
+//   myHeaders.append("Content-Type", "application/json");
+//   // myHeaders.append(
+//   //   "Cookie",
+//   //   "EGG_SESS=DFXZpcM31bRAT37S2_AoV3e_rCJWbmBs42EshRLqz_HO84LJkupAfuZx03L0O3D-x9gHfxn3UplF38lobVXEn9VumLLoF9HFrygwTAWbk5P79ZigWk5ids1pRWM-QQQNvP5mTjYH1DXZ_8sEDDnyiN20qdPp_s51Z9tdU2MVJA0TD4K3ObejENNB9mUWMS6kkWHoxlbZVx57zX2q7crt1FYP3_XuHtrcPRpMtPNGepe_lklxZPZ-KPbxRmuzDDTV2Z1TwIhow48gkCg_tqNTa_RC55qRvtMRnt6GeUgGXU9vl-JflW-nmgNR1yrx_G4euxXwSWpS-K0vTEK_UqXGNgC7XQcPv8yGrjWbgZu9LgD5JiAqOmd4rObTewPMbgwf"
+//   // );
+//   var raw = JSON.stringify({
+//     name,
+//     phone,
+//     email,
+//     streetAddress,
+//     city,
+//     postcode,
+//     // ownerId,
+//   });
+
+//   var requestOptions = {
+//     method: "POST",
+//     headers: myHeaders,
+//     body: raw,
+//     redirect: "follow",
+//   };
+//   fetch(BASE_URL + "/clinic/clinic/create", requestOptions)
+//     .then((response) => response.text())
+//     .then((result) => console.log(result))
+//     .catch((error) => console.log("error", error));
+// }
