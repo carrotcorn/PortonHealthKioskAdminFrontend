@@ -33,7 +33,6 @@ export default function CenteredTabs() {
         <Tab label='Appointment List' href='/appointmentlist' />
         <Tab label='Clinic List' href='/cliniclist' />
         <Tab label='Doctor List' href='/doctorlist' />
-        {/* <Tab label='Add Doctor' href='/adddoctor' /> */}
       </Tabs>
     </Paper>
   );

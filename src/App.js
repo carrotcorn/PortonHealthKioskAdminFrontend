@@ -32,23 +32,24 @@ export default class App extends Component {
           <div>
             <Navbar />
             <Route path='/' />
-            {/* {this.state.isAuthorized ? (
-              <div></div>
-            ) : ( */}
-            <div>
-              {/* <Route exact path='/' component={AdminSplash} /> */}
-              <Route exact path='/Login' component={Login} />
-              <Route
-                exact
-                path='/AppointmentList'
-                component={AppointmentList}
-              />
-              <Route exact path='/ClinicList' component={ClinicList} />
-              <Route exact path='/AddClinic' component={AddClinic} />
-              <Route exact path='/DoctorList' component={DoctorList} />
-              <Route exact path='/AddDoctor' component={AddDoctor} />
-            </div>
-            {/* )} */}
+            {this.state.isAuthorized ? (
+              <div>
+                <Route
+                  exact
+                  path='/AppointmentList'
+                  component={AppointmentList}
+                />
+                <Route exact path='/ClinicList' component={ClinicList} />
+                <Route exact path='/AddClinic' component={AddClinic} />
+                <Route exact path='/DoctorList' component={DoctorList} />
+                <Route exact path='/AddDoctor' component={AddDoctor} />
+              </div>
+            ) : (
+              <div>
+                <Route exact path='/' component={Login} />
+                <Route exact path='/Login' component={Login} />
+              </div>
+            )}
           </div>
         </Router>
         <Footer />

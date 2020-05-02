@@ -1,3 +1,4 @@
+/* global Backend */
 import React, { useState } from "react";
 import Avatar from "@material-ui/core/Avatar";
 import Button from "@material-ui/core/Button";
@@ -34,8 +35,6 @@ export default function Login() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
-  // const BACKEND = ("http://localhost:7001");
-
   function handleUsername(e) {
     setUsername(e.target.value);
   }
@@ -47,35 +46,19 @@ export default function Login() {
 
     console.log(username);
     e.preventDefault();
-    var myHeaders = new Headers();
-    // myHeaders.append("x-csrf-token", "WeEIfnq7-rWm38Nbltu5JlaCFfOEyePKoTP4");
-    myHeaders.append("Accept", "application/json");
-    myHeaders.append("Content-Type", "application/json");
-    // myHeaders.append(
-    //   "Cookie",
-    //   "EGG_SESS=DFXZpcM31bRAT37S2_AoV3e_rCJWbmBs42EshRLqz_HO84LJkupAfuZx03L0O3D-x9gHfxn3UplF38lobVXEn9VumLLoF9HFrygwTAWbk5P79ZigWk5ids1pRWM-QQQNvP5mTjYH1DXZ_8sEDDnyiN20qdPp_s51Z9tdU2MVJA0TD4K3ObejENNB9mUWMS6kkWHoxlbZVx57zX2q7crt1FYP3_XuHtrcPRpMtPNGepe_lklxZPZ-KPbxRmuzDDTV2Z1TwIhow48gkCg_tqNTa_RC55qRvtMRnt6GeUgGXU9vl-JflW-nmgNR1yrx_G4euxXwSWpS-K0vTEK_UqXGNgC7XQcPv8yGrjWbgZu9LgD5JiAqOmd4rObTewPMbgwf"
-    // );
-    var requestOptions = {
-      method: "POST",
-      headers: myHeaders,
-      body: JSON.stringify({
-        username,
-        password,
-        key: "d88b8076-3c3f-41cf-9fc3-ca3e923c009a",
-      }),
-      redirect: "follow",
-    };
-    fetch(BASE_URL + "/user/login", requestOptions)
-      .then((response) => response.text())
-      .then((result) => {
-        if (result.status === "OK") {
-          sessionStorage.setItem("isAuthorized", "yes");
-          window.location.reload(false);
-        }
-
-        console.log(result);
-      })
-      .catch((error) => console.log("Unable to sign in", error));
+    const backend = new Backend(BASE_URL);
+    try {
+      const result = await backend.post("/user/login", { username, password });
+      if (result.success) {
+        console.log(result)
+        window.sessionStorage.setItem("isAuthorized", "yes");
+        window.location.href = "/";
+      } else {
+        window.alert(result.error.message);
+      }
+    } catch (e) {
+      console.log(e);
+    }
   }
 
   return (
@@ -130,3 +113,34 @@ export default function Login() {
     </Container>
   );
 }
+// async function handleLogin(e) {
+//   const BASE_URL = "http://localhost:7001";
+
+//   console.log(username);
+//   e.preventDefault();
+//   var myHeaders = new Headers();
+//   myHeaders.append("Accept", "application/json");
+//   myHeaders.append("Content-Type", "application/json");
+
+//   var requestOptions = {
+//     method: "POST",
+//     headers: myHeaders,
+//     body: JSON.stringify({
+//       username,
+//       password,
+//       key: "d88b8076-3c3f-41cf-9fc3-ca3e923c009a",
+//     }),
+//     redirect: "follow",
+//   };
+//   fetch(BASE_URL + "/user/login", requestOptions)
+//     .then((response) => response.text())
+//     .then((result) => {
+//       if (result.status === "OK") {
+//         sessionStorage.setItem("isAuthorized", "yes");
+//         window.location.reload(false);
+//       }
+
+//       console.log(result);
+//     })
+//     .catch((error) => console.log("Unable to sign in", error));
+// }
