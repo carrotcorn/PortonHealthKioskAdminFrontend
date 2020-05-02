@@ -1,5 +1,5 @@
 /* global Backend */
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Button from "@material-ui/core/Button";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import TextField from "@material-ui/core/TextField";
@@ -53,7 +53,6 @@ export default function AddClinic() {
   async function createClinic(e) {
     const BASE_URL = "http://localhost:7001";
 
-    e.preventDefault();
     const backend = new Backend(BASE_URL);
     try {
       const result = await backend.post("/clinic/clinic/create", {
@@ -75,6 +74,9 @@ export default function AddClinic() {
       console.log(e);
     }
   }
+  useEffect(() => {
+    createClinic();
+  }, []);
 
   return (
     <div className={classes.root}>
@@ -83,7 +85,6 @@ export default function AddClinic() {
           onChange={handleClinicName}
           value={name}
           id='standard-full-width'
-
           style={{ margin: 8 }}
           placeholder='Clinic Name'
           fullWidth
