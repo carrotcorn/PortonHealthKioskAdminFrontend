@@ -8,6 +8,7 @@ import ClinicList from "./components/ClinicList";
 import AddClinic from "./components/AddClinic";
 import DoctorList from "./components/DoctorList";
 import AddDoctor from "./components/AddDoctor";
+import DynamicCheckin from "./components/DynamicCheckin";
 
 export default class App extends Component {
   constructor() {
@@ -34,6 +35,12 @@ export default class App extends Component {
             <Route path='/' />
             {this.state.isAuthorized ? (
               <div>
+                <Route
+                  exact
+                  path='/DynamicCheckin'
+                  component={DynamicCheckin}
+                />
+
                 <Route
                   exact
                   path='/AppointmentList'
