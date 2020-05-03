@@ -10,7 +10,6 @@ import TableRow from "@material-ui/core/TableRow";
 import Button from "@material-ui/core/Button";
 import Paper from "@material-ui/core/Paper";
 import Switch from "@material-ui/core/Switch";
-// import Checkbox from "@material-ui/core/Checkbox";
 
 const useStyles = makeStyles({
   table: {
@@ -56,9 +55,7 @@ export default function ClinicList() {
       .catch((error) => console.log("error", error));
   }
 
-  function disableClinic() {
-    
-  }
+  function disableClinic() {}
 
   useEffect(() => {
     getClinics();
@@ -91,12 +88,7 @@ export default function ClinicList() {
                 return (
                   <TableRow key={row.name}>
                     <TableCell padding='switch'>
-                      <Switch
-                        onClick={disableClinic}
-                        key={row.disable}
-                     
-                      />
-                      
+                      <Switch onClick={disableClinic} key={row.disable} />
                     </TableCell>
                     <TableCell component='th' scope='row'>
                       {row.name}
