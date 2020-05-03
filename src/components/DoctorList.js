@@ -26,10 +26,6 @@ export default function DoctorList() {
     var myHeaders = new Headers();
     myHeaders.append("Accept", "application/json");
     myHeaders.append("Content-Type", "application/json");
-    // myHeaders.append(
-    //   "Cookie",
-    //   "EGG_SESS=iFwruczMLmxEyMIWRWfDddoZIoFEcl8trLYHNMSpwFT5YK94gOPrnqE2ST8f5qsmTFmXchmpDl5lkGktuhuNZtaDsSuewBc1SjXheYxfPIvKMSWTmznPrzRWLNLLHZ-3PSyVMGWIp9x6fnoG4Fjr_LghpfkKyMwsrl00hj1CwqFgqh0TpuM6uF_VaUyrbFFpav955v9VprToaWQQmKE4jhLUrE1FoWwTbDT44o4WAkwA2-bbpTboLxPRTCI3Lt7oUjC9tFA4-xxKxPvY0GYWOIFtum0yX4fRgK1dwCqEy4GTRxTgZvwQ8aIs5zpGjtOsFnV3M6CSmFMd2ww9_y0Q1nUmM5NLQ-gGSbiTMLsn1T8cEILldqMDtD0ct1D_9F_Qp8EwnwW4_mqZk1kAkRA6HpRWGvJ5p-DO7IvPle2ZRj_rk6rIet1R07pTalJlu0Efw8lpITnl8Ihy9BY74ujtwg=="
-    // );
     var requestOptions = {
       method: "GET",
       headers: myHeaders,

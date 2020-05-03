@@ -30,6 +30,7 @@ export default function CenteredTabs() {
         centered
       >
         <Tab label='Login' href='/login' />
+        <Tab label='Manage Checkin Form' href='/dynamiccheckin' />
         <Tab label='Appointment List' href='/appointmentlist' />
         <Tab label='Clinic List' href='/cliniclist' />
         <Tab label='Doctor List' href='/doctorlist' />

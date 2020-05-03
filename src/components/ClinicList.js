@@ -1,3 +1,4 @@
+/* global Backend */
 import React, { useState, useEffect } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Table from "@material-ui/core/Table";
@@ -20,10 +21,11 @@ export default function ClinicList() {
   const classes = useStyles();
 
   const [listClinic, setClinic] = useState([]);
-
-  const BASE_URL = "http://localhost:7001";
+  const [toggle, setToggle] = useState(false);
 
   async function getClinics() {
+    const BASE_URL = "http://localhost:7001";
+
     var myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/json");
     myHeaders.append("Access-Control-Allow-Origin", "*");
@@ -31,15 +33,10 @@ export default function ClinicList() {
       "Access-Control-Allow-Headers",
       "Origin, X-Requested-With, Content-Type, Accept"
     );
-    // myHeaders.append(
-    //   "Cookie",
-    //   "EGG_SESS=DFXZpcM31bRAT37S2_AoV3e_rCJWbmBs42EshRLqz_HO84LJkupAfuZx03L0O3D-x9gHfxn3UplF38lobVXEn9VumLLoF9HFrygwTAWbk5P79ZigWk5ids1pRWM-QQQNvP5mTjYH1DXZ_8sEDDnyiN20qdPp_s51Z9tdU2MVJA0TD4K3ObejENNB9mUWMS6kkWHoxlbZVx57zX2q7crt1FYP3_XuHtrcPRpMtPNGepe_lklxZPZ-KPbxRmuzDDTV2Z1TwIhow48gkCg_tqNTa_RC55qRvtMRnt6GeUgGXU9vl-JflW-nmgNR1yrx_G4euxXwSWpS-K0vTEK_UqXGNgC7XQcPv8yGrjWbgZu9LgD5JiAqOmd4rObTewPMbgwf"
-    // );
 
     var requestOptions = {
       method: "GET",
       headers: myHeaders,
-      // body: raw,
       redirect: "follow",
     };
     console.log("REQUEST:", requestOptions);
@@ -58,9 +55,13 @@ export default function ClinicList() {
       .catch((error) => console.log("error", error));
   }
 
+  function disableClinic() {}
+
   useEffect(() => {
     getClinics();
+    disableClinic();
   }, []);
+
   return (
     <div>
       <TableContainer component={Paper}>
@@ -71,6 +72,7 @@ export default function ClinicList() {
         >
           <TableHead>
             <TableRow>
+              <TableCell>Enable/Disable</TableCell>
               <TableCell>Clinic Name</TableCell>
               <TableCell align='right'>Phone</TableCell>
               <TableCell align='right'>Email</TableCell>
@@ -85,6 +87,9 @@ export default function ClinicList() {
               listClinic.map((row) => {
                 return (
                   <TableRow key={row.name}>
+                    <TableCell padding='switch'>
+                      <Switch onClick={disableClinic} key={row.disable} />
+                    </TableCell>
                     <TableCell component='th' scope='row'>
                       {row.name}
                     </TableCell>
@@ -105,3 +110,26 @@ export default function ClinicList() {
     </div>
   );
 }
+
+// async function getClinics() {
+//   const BASE_URL = "http://localhost:7001";
+
+//   const backend = new Backend(BASE_URL);
+//   try {
+//     const result = await backend.get("/public/clinic/find");
+//     const theClinics = JSON.parse(result);
+//     console.log("The Clinics:", theClinics);
+//     console.log(typeof theClinics);
+
+//     if (theClinics.success) {
+//       setClinic(theClinics.result)
+//       console.log(theClinics)
+//       window.sessionStorage.setItem("isAuthorized", "yes");
+//       window.location.href = "/";
+//     } else {
+//       window.alert(theClinics.error.message);
+//     }
+//   } catch (e) {
+//     console.log(e);
+//   }
+// }
