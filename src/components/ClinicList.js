@@ -9,6 +9,7 @@ import TableRow from "@material-ui/core/TableRow";
 import Button from "@material-ui/core/Button";
 import Paper from "@material-ui/core/Paper";
 import Switch from "@material-ui/core/Switch";
+import Checkbox from '@material-ui/core/Checkbox';
 
 const useStyles = makeStyles({
   table: {
@@ -71,6 +72,7 @@ export default function ClinicList() {
         >
           <TableHead>
             <TableRow>
+            <TableCell >Enable/Disable</TableCell>
               <TableCell>Clinic Name</TableCell>
               <TableCell align='right'>Phone</TableCell>
               <TableCell align='right'>Email</TableCell>
@@ -85,9 +87,13 @@ export default function ClinicList() {
               listClinic.map((row) => {
                 return (
                   <TableRow key={row.name}>
-                    <TableCell component='th' scope='row'>
-                      {row.name}
+                    <TableCell padding="switch">
+                    <Switch
+                          // checked={isItemSelected}
+                          // inputProps={{ 'aria-labelledby': labelId }}
+                        />
                     </TableCell>
+                    <TableCell component='th' scope='row'>{row.name}</TableCell>
                     <TableCell align='right'>{row.phone}</TableCell>
                     <TableCell align='right'>{row.email}</TableCell>
                     <TableCell align='right'>{row.streetAddress}</TableCell>
