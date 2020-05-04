@@ -26,13 +26,13 @@ export default function AppointmentList() {
         var response = await API.get('/user/current');
         if (response.success) { 
           const user = response.result;
-          console.log(user);
-          response = await API.get('/clinic/find', { ownerId: user._id});
+          response = await API.post('/clinic/find', { conditions: { ownerId: user._id}});
           if (response.success) {
             const clinic = response.result;
-            console.log(clinic);
-            response = await API.get('/appointment/find', { clinicId: clinic._id});
-            setAppointments(response.result);
+            console.log(clinic);                         
+            response = await API.post('/appointment/find', { conditions: {clinicId: clinic._id}});
+             setAppointments(response.result);
+             console.log(response.result);             
           }
         }
         else {
@@ -53,7 +53,7 @@ export default function AppointmentList() {
         <TableHead>
           <TableRow>
             <TableCell>Start Time</TableCell>
-            <TableCell align='right'>Checked-In</TableCell>
+            <TableCell>Checked-In</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -61,9 +61,9 @@ export default function AppointmentList() {
             appointments.map((row) => {
               return (
                 //this return in necessary
-                <TableRow key={row.startTime}>
-                  <TableCell >{row.time.start}</TableCell>
-                  <TableCell align='right'>{row.checkedIn ? "Checked-In" : "Not Checked-In"}</TableCell>
+                <TableRow key={row.time.start}>
+                  <TableCell>{(new Date(row.time.start)).toLocaleString()}</TableCell>
+                  <TableCell>{row.checkedIn ? "Checked-In" : "Not Checked-In"}</TableCell>
                 </TableRow>
               );
             })}

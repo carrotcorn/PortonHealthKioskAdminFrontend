@@ -8,7 +8,7 @@ import {
 import Footer from "./utilities/Footer";
 import AppointmentList from "./components/AppointmentList";
 import ClinicList from "./components/ClinicList";
-import DynamicCheckin from "./components/DynamicCheckin";
+import Checkin from "./components/Checkin";
 
 import Avatar from "@material-ui/core/Avatar";
 import Button from "@material-ui/core/Button";
@@ -210,8 +210,10 @@ export default function App() {
               </>
             ) : (
               <>
-                <Link  to="/Logout">Logout</Link>              
-                <Route path="/Logout" component={SignOut} /> 
+                <Link  to="/Logout">Logout</Link>
+                <Route path="/Logout" component={SignOut} /><span>&nbsp;&nbsp;</span>
+                {state.userToken.roles=="clinic" && <Link  to="/Checkin">Checkin Form</Link>}
+                <Route path="/Checkin" component={Checkin} /> 
                 {state.userToken.roles=="admin" && <ClinicList />}
                 {state.userToken.roles=="clinic" && <AppointmentList />}                
               </>

@@ -94,26 +94,3 @@ export default function ClinicList() {
     </div>
   );
 }
-
-// async function getClinics() {
-//   const BASE_URL = "http://localhost:7001";
-
-//   const backend = new Backend(BASE_URL);
-//   try {
-//     const result = await backend.get("/public/clinic/find");
-//     const theClinics = JSON.parse(result);
-//     console.log("The Clinics:", theClinics);
-//     console.log(typeof theClinics);
-
-//     if (theClinics.success) {
-//       setClinic(theClinics.result)
-//       console.log(theClinics)
-//       window.sessionStorage.setItem("isAuthorized", "yes");
-//       window.location.href = "/";
-//     } else {
-//       window.alert(theClinics.error.message);
-//     }
-//   } catch (e) {
-//     console.log(e);
-//   }
-// }
