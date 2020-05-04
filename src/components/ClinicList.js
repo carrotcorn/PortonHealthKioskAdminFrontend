@@ -21,38 +21,29 @@ export default function ClinicList() {
   const classes = useStyles();
 
   const [listClinic, setClinic] = useState([]);
-  const [toggle, setToggle] = useState(false);
+  // const [toggle, setToggle] = useState(false);
 
   async function getClinics() {
     const BASE_URL = "http://localhost:7001";
 
-    var myHeaders = new Headers();
-    myHeaders.append("Content-Type", "application/json");
-    myHeaders.append("Access-Control-Allow-Origin", "*");
-    myHeaders.append(
-      "Access-Control-Allow-Headers",
-      "Origin, X-Requested-With, Content-Type, Accept"
-    );
+    const backend = new Backend(BASE_URL);
+    try {
+      const result = await backend.get("/public/clinic/find");
+      // const theClinics = JSON.parse(result);
+      // console.log("The Clinics:", theClinics);
+      // console.log(typeof theClinics);
 
-    var requestOptions = {
-      method: "GET",
-      headers: myHeaders,
-      redirect: "follow",
-    };
-    console.log("REQUEST:", requestOptions);
-
-    fetch(BASE_URL + "/public/clinic/find", requestOptions)
-      .then((response) => response.text())
-      .then((result) => {
-        const theClinics = JSON.parse(result);
-        console.log("The Clinics:", theClinics);
-        console.log(typeof theClinics);
-        if (theClinics.success) {
-          setClinic(theClinics.result);
-          console.log(JSON.parse(theClinics));
-        }
-      })
-      .catch((error) => console.log("error", error));
+      if (result.success) {
+        setClinic(result);
+        // console.log(theClinics);
+        // window.sessionStorage.setItem("isAuthorized", "yes"); //FOR USE IN LOGIN ONLY, THESE 2 LINES
+        // window.location.href = "/";
+      } else {
+        window.alert(result.error.message);
+      }
+    } catch (e) {
+      console.log(e);
+    }
   }
 
   function disableClinic() {}
@@ -83,8 +74,8 @@ export default function ClinicList() {
           </TableHead>
 
           <TableBody>
-            {listClinic &&
-              listClinic.map((row) => {
+            {listClinic.result &&
+              listClinic.result.map((row) => {
                 return (
                   <TableRow key={row.name}>
                     <TableCell padding='switch'>
@@ -114,22 +105,31 @@ export default function ClinicList() {
 // async function getClinics() {
 //   const BASE_URL = "http://localhost:7001";
 
-//   const backend = new Backend(BASE_URL);
-//   try {
-//     const result = await backend.get("/public/clinic/find");
-//     const theClinics = JSON.parse(result);
-//     console.log("The Clinics:", theClinics);
-//     console.log(typeof theClinics);
+//   var myHeaders = new Headers();
+//   myHeaders.append("Content-Type", "application/json");
+//   myHeaders.append("Access-Control-Allow-Origin", "*");
+//   myHeaders.append(
+//     "Access-Control-Allow-Headers",
+//     "Origin, X-Requested-With, Content-Type, Accept"
+//   );
 
-//     if (theClinics.success) {
-//       setClinic(theClinics.result)
-//       console.log(theClinics)
-//       window.sessionStorage.setItem("isAuthorized", "yes");
-//       window.location.href = "/";
-//     } else {
-//       window.alert(theClinics.error.message);
-//     }
-//   } catch (e) {
-//     console.log(e);
-//   }
+//   var requestOptions = {
+//     method: "GET",
+//     headers: myHeaders,
+//     redirect: "follow",
+//   };
+//   console.log("REQUEST:", requestOptions);
+
+//   fetch(BASE_URL + "/public/clinic/find", requestOptions)
+//     .then((response) => response.text())
+//     .then((result) => {
+//       const theClinics = JSON.parse(result);
+//       console.log("The Clinics:", theClinics);
+//       console.log(typeof theClinics);
+//       if (theClinics.success) {
+//         setClinic(theClinics.result);
+//         console.log(JSON.parse(theClinics));
+//       }
+//     })
+//     .catch((error) => console.log("error", error));
 // }

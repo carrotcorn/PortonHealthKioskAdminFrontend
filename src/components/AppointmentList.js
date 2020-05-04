@@ -7,6 +7,8 @@ import TableContainer from "@material-ui/core/TableContainer";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import Paper from "@material-ui/core/Paper";
+import { format } from "date-fns";
+import { differenceInYears } from "date-fns";
 
 const useStyles = makeStyles({
   table: {
@@ -39,7 +41,8 @@ export default function AppointmentList() {
       .then((result) => {
         const theAppointments = JSON.parse(result);
         console.log("the appointments", theAppointments);
-         console.log(typeof theAppointments);
+        console.log(typeof theAppointments);
+
         if (theAppointments.success) {
           setListAppointments(theAppointments.result); //this allows me to not throw an error when running
           console.log(JSON.stringify(listAppointment));
@@ -69,18 +72,28 @@ export default function AppointmentList() {
           {listAppointment &&
             listAppointment.map((row) => {
               return (
-                //this return in necessary
-                <TableRow key={row.startTime}>
+                //this return in necessary  TO ADD INFORMATION IN A CHILD JSON, DO ROW."OBJECT"."CHILDOBJECT"
+                <TableRow key={row._id}>
                   <TableCell component='th' scope='row'>
-                    {row.startTime}
+                    {format(new Date(row.time.start), "p")}
                   </TableCell>
-                  <TableCell align='right'>{row.endTime}</TableCell>
-
-                  <TableCell align='right'>{row.familyName}</TableCell>
-                  <TableCell align='right'>{row.givenName}</TableCell>
-                  <TableCell align='right'>{row.age}</TableCell>
-                  <TableCell align='right'>{row.phone}</TableCell>
-                  <TableCell align='right'>{row.checkedIn ? "Checked-In" : "Not Checked-In"}</TableCell>
+                  <TableCell align='right'>
+                    {format(new Date(row.time.end), "p")}
+                  </TableCell>
+                  <TableCell align='right'>
+                    {row.patientId.familyName}
+                  </TableCell>
+                  <TableCell align='right'>{row.patientId.givenName}</TableCell>
+                  <TableCell align='right'>
+                    {differenceInYears(
+                      new Date(),
+                      new Date(row.patientId.birthday)
+                    )}
+                  </TableCell>
+                  <TableCell align='right'>{row.patientId.phone}</TableCell>
+                  <TableCell align='right'>
+                    {row.checkedIn ? "Checked-In" : "Not Checked-In"}
+                  </TableCell>
                 </TableRow>
               );
             })}
