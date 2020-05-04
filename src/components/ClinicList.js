@@ -22,8 +22,7 @@ export default function ClinicList() {
 
   const [listClinic, setClinic] = useState([]);
   const [state, setState] = useState({
-    checked: false,
-    // checkedB: true,
+    // toggle: false,
   });
 
   async function getClinics() {
@@ -43,18 +42,21 @@ export default function ClinicList() {
     }
   }
 
-  const disableClinic = (e) => {
+  const disableClinic = (clinicId, event) => {
     setState({
-      state,
-      [e.target.name]: e.target.value,
-      [e.target.name]: e.target.checked,
+      ...state,
+      // all activated buttons within object, "..." keeps the previous states within the object,
+      // so it doesnt rewrite the object evert time
+      // [clinicId]: event.target.value,
+      [clinicId]: event.target.checked,
     });
-    console.log();
+    console.log("P00p");
   };
+
+  console.log(state);
 
   useEffect(() => {
     getClinics();
-    // disableClinic();
   }, []);
 
   return (
@@ -70,7 +72,6 @@ export default function ClinicList() {
               <TableCell>Enable/Disable</TableCell>
               <TableCell>Clinic Name</TableCell>
               <TableCell align='right'>Phone</TableCell>
-              {/* <TableCell align='right'>Email</TableCell> */}
               <TableCell align='right'>Street Address</TableCell>
               <TableCell align='right'>city</TableCell>
               <TableCell align='right'>Postal Code</TableCell>
@@ -84,17 +85,18 @@ export default function ClinicList() {
                   <TableRow key={row._id}>
                     <TableCell padding='switch'>
                       <Switch
-                        checked={state.checked}
-                        onChange={disableClinic}
+                        checked={state[row._id]} //[] allows me to access the object dynamically
+                        onChange={(event) => {
+                          disableClinic(row._id, event);
+                        }}
                         value={row._id}
-                        name='checked'
+                        name='toggle'
                       />
                     </TableCell>
                     <TableCell component='th' scope='row'>
                       {row.name}
                     </TableCell>
                     <TableCell align='right'>{row.phone}</TableCell>
-                    {/* <TableCell align='right'>{row.email}</TableCell> */}
                     <TableCell align='right'>{row.address.street}</TableCell>
                     <TableCell align='right'>{row.address.city}</TableCell>
                     <TableCell align='right'>{row.address.postcode}</TableCell>
@@ -110,35 +112,3 @@ export default function ClinicList() {
     </div>
   );
 }
-
-// async function getClinics() {
-//   const BASE_URL = "http://localhost:7001";
-
-//   var myHeaders = new Headers();
-//   myHeaders.append("Content-Type", "application/json");
-//   myHeaders.append("Access-Control-Allow-Origin", "*");
-//   myHeaders.append(
-//     "Access-Control-Allow-Headers",
-//     "Origin, X-Requested-With, Content-Type, Accept"
-//   );
-
-//   var requestOptions = {
-//     method: "GET",
-//     headers: myHeaders,
-//     redirect: "follow",
-//   };
-//   console.log("REQUEST:", requestOptions);
-
-//   fetch(BASE_URL + "/public/clinic/find", requestOptions)
-//     .then((response) => response.text())
-//     .then((result) => {
-//       const theClinics = JSON.parse(result);
-//       console.log("The Clinics:", theClinics);
-//       console.log(typeof theClinics);
-//       if (theClinics.success) {
-//         setClinic(theClinics.result);
-//         console.log(JSON.parse(theClinics));
-//       }
-//     })
-//     .catch((error) => console.log("error", error));
-// }
