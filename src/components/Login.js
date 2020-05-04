@@ -38,9 +38,11 @@ export default function Login() {
   function handleUsername(e) {
     setUsername(e.target.value);
   }
+  
   function handlePassword(e) {
     setPassword(e.target.value);
   }
+
   async function handleLogin(e) {
     const BASE_URL = "http://localhost:7001";
 

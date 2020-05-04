@@ -7,6 +7,7 @@ import TableContainer from "@material-ui/core/TableContainer";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import Paper from "@material-ui/core/Paper";
+import API from '../API/Backend';
 
 const useStyles = makeStyles({
   table: {
@@ -17,37 +18,32 @@ const useStyles = makeStyles({
 export default function AppointmentList() {
   const classes = useStyles();
 
-  const [listAppointment, setListAppointments] = useState([]);
+  const [appointments, setAppointments] = useState([]);
 
-  async function getAppointments() {
-    var myHeaders = new Headers();
-    myHeaders.append("Content-Type", "application/json");
-    myHeaders.append("Content-Type", "application/json");
-    myHeaders.append("Access-Control-Allow-Origin", "*");
-    myHeaders.append(
-      "Access-Control-Allow-Headers",
-      "Origin, X-Requested-With, Content-Type, Accept"
-    );
-    var requestOptions = {
-      method: "GET",
-      headers: myHeaders,
-      redirect: "follow",
-    };
-    console.log("REQUEST:", requestOptions);
-    fetch("http://localhost:7001/public/appointment/find", requestOptions)
-      .then((response) => response.text())
-      .then((result) => {
-        const theAppointments = JSON.parse(result);
-        console.log("the appointments", theAppointments);
-         console.log(typeof theAppointments);
-        if (theAppointments.success) {
-          setListAppointments(theAppointments.result); //this allows me to not throw an error when running
-          console.log(JSON.stringify(listAppointment));
-        }
-      })
-      .catch((error) => console.log("error", error));
-  }
   useEffect(() => {
+    async function getAppointments() {
+      try {
+        var response = await API.get('/user/current');
+        if (response.success) { 
+          const user = response.result;
+          console.log(user);
+          response = await API.get('/clinic/find', { ownerId: user._id});
+          if (response.success) {
+            const clinic = response.result;
+            console.log(clinic);
+            response = await API.get('/appointment/find', { clinicId: clinic._id});
+            setAppointments(response.result);
+          }
+        }
+        else {
+          console.log(response.status);
+        }
+      }
+      catch (error) {
+          console.log(error.response);
+      }
+    }
+  
     getAppointments();
   }, []);
 
@@ -57,29 +53,16 @@ export default function AppointmentList() {
         <TableHead>
           <TableRow>
             <TableCell>Start Time</TableCell>
-            <TableCell align='right'>End Time</TableCell>
-            <TableCell align='right'>Family Name</TableCell>
-            <TableCell align='right'>Given Name</TableCell>
-            <TableCell align='right'>Age</TableCell>
-            <TableCell align='right'>Phone</TableCell>
             <TableCell align='right'>Checked-In</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
-          {listAppointment &&
-            listAppointment.map((row) => {
+          {appointments &&
+            appointments.map((row) => {
               return (
                 //this return in necessary
                 <TableRow key={row.startTime}>
-                  <TableCell component='th' scope='row'>
-                    {row.startTime}
-                  </TableCell>
-                  <TableCell align='right'>{row.endTime}</TableCell>
-
-                  <TableCell align='right'>{row.familyName}</TableCell>
-                  <TableCell align='right'>{row.givenName}</TableCell>
-                  <TableCell align='right'>{row.age}</TableCell>
-                  <TableCell align='right'>{row.phone}</TableCell>
+                  <TableCell >{row.time.start}</TableCell>
                   <TableCell align='right'>{row.checkedIn ? "Checked-In" : "Not Checked-In"}</TableCell>
                 </TableRow>
               );

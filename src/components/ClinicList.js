@@ -10,6 +10,7 @@ import TableRow from "@material-ui/core/TableRow";
 import Button from "@material-ui/core/Button";
 import Paper from "@material-ui/core/Paper";
 import Switch from "@material-ui/core/Switch";
+import API from '../API/Backend';
 
 const useStyles = makeStyles({
   table: {
@@ -23,44 +24,27 @@ export default function ClinicList() {
   const [listClinic, setClinic] = useState([]);
   const [toggle, setToggle] = useState(false);
 
-  async function getClinics() {
-    const BASE_URL = "http://localhost:7001";
-
-    var myHeaders = new Headers();
-    myHeaders.append("Content-Type", "application/json");
-    myHeaders.append("Access-Control-Allow-Origin", "*");
-    myHeaders.append(
-      "Access-Control-Allow-Headers",
-      "Origin, X-Requested-With, Content-Type, Accept"
-    );
-
-    var requestOptions = {
-      method: "GET",
-      headers: myHeaders,
-      redirect: "follow",
-    };
-    console.log("REQUEST:", requestOptions);
-
-    fetch(BASE_URL + "/public/clinic/find", requestOptions)
-      .then((response) => response.text())
-      .then((result) => {
-        const theClinics = JSON.parse(result);
-        console.log("The Clinics:", theClinics);
-        console.log(typeof theClinics);
-        if (theClinics.success) {
-          setClinic(theClinics.result);
-          console.log(JSON.parse(theClinics));
+  useEffect(() => {
+    async function getClinics() {
+      try {
+        const response = await API.get('/clinic/find');
+        if (response.success) { 
+          console.log(response.result);
+          setClinic(response.result);
         }
-      })
-      .catch((error) => console.log("error", error));
-  }
+        else {
+          console.log(response.status);
+        }
+      }
+      catch (error) {
+          console.log(error.response);
+      }
+    }
+  
+    getClinics();
+  }, []);
 
   function disableClinic() {}
-
-  useEffect(() => {
-    getClinics();
-    disableClinic();
-  }, []);
 
   return (
     <div>
