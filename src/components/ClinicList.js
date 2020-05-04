@@ -43,11 +43,11 @@ export default function ClinicList() {
     }
   }
 
-  const disableClinic = (event) => {
+  const disableClinic = (e) => {
     setState({
       state,
-      [event.target.name]: event.target.value,
-      [event.target.name]: event.target.checked,
+      [e.target.name]: e.target.value,
+      [e.target.name]: e.target.checked,
     });
     console.log();
   };
