@@ -1,5 +1,5 @@
 /* global Backend */
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, setState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
@@ -21,7 +21,10 @@ export default function ClinicList() {
   const classes = useStyles();
 
   const [listClinic, setClinic] = useState([]);
-  // const [toggle, setToggle] = useState(false);
+  const [state, setState] = useState({
+    checked: false,
+    // checkedB: true,
+  });
 
   async function getClinics() {
     const BASE_URL = "http://localhost:7001";
@@ -29,15 +32,9 @@ export default function ClinicList() {
     const backend = new Backend(BASE_URL);
     try {
       const result = await backend.get("/public/clinic/find");
-      // const theClinics = JSON.parse(result);
-      // console.log("The Clinics:", theClinics);
-      // console.log(typeof theClinics);
-
       if (result.success) {
         setClinic(result);
-        // console.log(theClinics);
-        // window.sessionStorage.setItem("isAuthorized", "yes"); //FOR USE IN LOGIN ONLY, THESE 2 LINES
-        // window.location.href = "/";
+        console.log("Clinics:", result);
       } else {
         window.alert(result.error.message);
       }
@@ -46,11 +43,18 @@ export default function ClinicList() {
     }
   }
 
-  function disableClinic() {}
+  const disableClinic = (event) => {
+    setState({
+      state,
+      [event.target.name]: event.target.value,
+      [event.target.name]: event.target.checked,
+    });
+    console.log();
+  };
 
   useEffect(() => {
     getClinics();
-    disableClinic();
+    // disableClinic();
   }, []);
 
   return (
@@ -66,7 +70,7 @@ export default function ClinicList() {
               <TableCell>Enable/Disable</TableCell>
               <TableCell>Clinic Name</TableCell>
               <TableCell align='right'>Phone</TableCell>
-              <TableCell align='right'>Email</TableCell>
+              {/* <TableCell align='right'>Email</TableCell> */}
               <TableCell align='right'>Street Address</TableCell>
               <TableCell align='right'>city</TableCell>
               <TableCell align='right'>Postal Code</TableCell>
@@ -77,18 +81,23 @@ export default function ClinicList() {
             {listClinic.result &&
               listClinic.result.map((row) => {
                 return (
-                  <TableRow key={row.name}>
+                  <TableRow key={row._id}>
                     <TableCell padding='switch'>
-                      <Switch onClick={disableClinic} key={row.disable} />
+                      <Switch
+                        checked={state.checked}
+                        onChange={disableClinic}
+                        value={row._id}
+                        name='checked'
+                      />
                     </TableCell>
                     <TableCell component='th' scope='row'>
                       {row.name}
                     </TableCell>
                     <TableCell align='right'>{row.phone}</TableCell>
-                    <TableCell align='right'>{row.email}</TableCell>
-                    <TableCell align='right'>{row.streetAddress}</TableCell>
-                    <TableCell align='right'>{row.city}</TableCell>
-                    <TableCell align='right'>{row.postcode}</TableCell>
+                    {/* <TableCell align='right'>{row.email}</TableCell> */}
+                    <TableCell align='right'>{row.address.street}</TableCell>
+                    <TableCell align='right'>{row.address.city}</TableCell>
+                    <TableCell align='right'>{row.address.postcode}</TableCell>
                   </TableRow>
                 );
               })}
