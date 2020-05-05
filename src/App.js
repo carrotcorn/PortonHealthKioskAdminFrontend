@@ -1,83 +1,61 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import AppointmentList from "./components/AppointmentList";
 import ClinicList from "./components/ClinicList";
 import PageNotFound from "./components/PageNotFound";
+import Login from "./components/Login";
 import Layout from "./Layout";
 import { Route, Switch } from "react-router-dom";
+import { UserContext } from "./Contexts";
+import { getCurrentUser } from "./utilities/API";
+import { CircularProgress, Typography } from "@material-ui/core";
+import PrivateRoute from "./utilities/PrivateRoute";
 
 function App(props) {
+  const [user, setUser] = useState();
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        const response = await getCurrentUser();
+        if (response.success) {
+          console.log(response.result);
+          setUser(response.result);
+        }
+        setLoading(false);
+      } catch (e) {
+        console.log(e);
+      }
+    };
+    fetchUser();
+  }, []);
+
+  if (loading) {
+    return <CircularProgress />;
+  }
+
   return (
-    <Layout>
-      <Switch>
-        <Route exact path="/appointments" component={AppointmentList} />
-        <Route exact path="/clinics" component={ClinicList} />
-        <Route path="*" component={PageNotFound} />
-        {/* <Route exact path="/AddClinic" component={AddClinic} /> */}
-        {/* <Route exact path="/DoctorList" component={DoctorList} /> */}
-        {/* <Route exact path="/AddDoctor" component={AddDoctor} /> */}
-      </Switch>
-    </Layout>
+    <UserContext.Provider value={{ user, setUser }}>
+      <Layout>
+        <Switch>
+          <Route path="/login" component={Login} />
+          <PrivateRoute exact path="/">
+            <Typography>Home</Typography>
+          </PrivateRoute>
+          <PrivateRoute exact path="/appointments">
+            <AppointmentList />
+          </PrivateRoute>
+          <PrivateRoute exact path="/clinics">
+            <ClinicList />
+          </PrivateRoute>
+          <PrivateRoute path="*" component={PageNotFound} />
+          {/* <Route exact path="/AddClinic" component={AddClinic} /> */}
+          {/* <Route exact path="/DoctorList" component={DoctorList} /> */}
+          {/* <Route exact path="/AddDoctor" component={AddDoctor} /> */}
+        </Switch>
+      </Layout>
+    </UserContext.Provider>
   );
 }
 
 export default App;
-
-// import React, { Component } from "react";
-// import Navbar from "./utilities/Navbar";
-// import Login from "./components/Login";
-// import Footer from "./utilities/Footer";
-// import AppointmentList from "./components/AppointmentList";
-// import ClinicList from "./components/ClinicList";
-// import AddClinic from "./components/AddClinic";
-// import DoctorList from "./components/DoctorList";
-// import AddDoctor from "./components/AddDoctor";
-// import DynamicCheckin from "./components/DynamicCheckin";
-
-// export default class App extends Component {
-//   constructor() {
-//     super();
-//     this.state = {
-//       isAuthorized: false,
-//     };
-//   }
-//   componentDidMount() {
-//     console.log("start");
-//     if (sessionStorage.getItem("isAuthorized") === "yes") {
-//       this.setState({ isAuthorized: true });
-//     }
-//   }
-//   render() {
-//     const isAllowed = sessionStorage.getItem("isAuthorized");
-//     console.log(`isAllowed: ${isAllowed}`);
-
-//     return (
-//       <div className="App">
-//         <div>
-//           <Navbar />
-//           <Route path="/" />
-//           {this.state.isAuthorized ? (
-//             <div>
-//               <Route exact path="/DynamicCheckin" component={DynamicCheckin} />
-
-//               <Route
-//                 exact
-//                 path="/AppointmentList"
-//                 component={AppointmentList}
-//               />
-//               <Route exact path="/ClinicList" component={ClinicList} />
-//               <Route exact path="/AddClinic" component={AddClinic} />
-//               <Route exact path="/DoctorList" component={DoctorList} />
-//               <Route exact path="/AddDoctor" component={AddDoctor} />
-//             </div>
-//           ) : (
-//             <div>
-//               <Route exact path="/" component={Login} />
-//               <Route exact path="/Login" component={Login} />
-//             </div>
-//           )}
-//         </div>
-//         <Footer />
-//       </div>
-//     );
-//   }
-// }
