@@ -6,16 +6,17 @@ import Divider from "@material-ui/core/Divider";
 import Drawer from "@material-ui/core/Drawer";
 import Hidden from "@material-ui/core/Hidden";
 import IconButton from "@material-ui/core/IconButton";
-import InboxIcon from "@material-ui/icons/MoveToInbox";
 import List from "@material-ui/core/List";
-import ListItem from "@material-ui/core/ListItem";
-import ListItemIcon from "@material-ui/core/ListItemIcon";
-import ListItemText from "@material-ui/core/ListItemText";
-import MailIcon from "@material-ui/icons/Mail";
 import MenuIcon from "@material-ui/icons/Menu";
+import HomeIcon from "@material-ui/icons/Home";
+import SettingsIcon from "@material-ui/icons/Settings";
+import AssignmentIcon from "@material-ui/icons/Assignment";
+import LocalHospitalIcon from "@material-ui/icons/LocalHospital";
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
 import { makeStyles, useTheme } from "@material-ui/core/styles";
+import ListItemLink from "./utilities/ListItemLink";
+import { Route } from "react-router";
 
 const drawerWidth = 240;
 
@@ -52,6 +53,28 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+const navLinks = [
+  { path: "/", name: "Home", icon: <HomeIcon /> },
+  {
+    path: "/clinics",
+    name: "Clinics",
+    roles: ["admin"],
+    icon: <LocalHospitalIcon />,
+  },
+  {
+    path: "/appointments",
+    name: "Appointments",
+    roles: ["clinic"],
+    icon: <AssignmentIcon />,
+  },
+  {
+    path: "/configuration",
+    name: "Configuration",
+    roles: ["clinic"],
+    icon: <SettingsIcon />,
+  },
+];
+
 function Layout(props) {
   const { window, children } = props;
   const classes = useStyles();
@@ -67,13 +90,8 @@ function Layout(props) {
       <div className={classes.toolbar} />
       <Divider />
       <List>
-        {["Inbox", "Starred", "Send email", "Drafts"].map((text, index) => (
-          <ListItem button key={text}>
-            <ListItemIcon>
-              {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-            </ListItemIcon>
-            <ListItemText primary={text} />
-          </ListItem>
+        {navLinks.map(({ path, name, icon }) => (
+          <ListItemLink to={path} primary={name} icon={icon} />
         ))}
       </List>
     </div>
@@ -96,9 +114,16 @@ function Layout(props) {
           >
             <MenuIcon />
           </IconButton>
-          <Typography variant="h6" noWrap>
-            Responsive drawer
-          </Typography>
+          <Route>
+            {({ location }) => (
+              <Typography variant="h5" gutterBottom>
+                {
+                  navLinks.filter((link) => link.path === location.pathname)[0]
+                    .name
+                }
+              </Typography>
+            )}
+          </Route>
         </Toolbar>
       </AppBar>
       <nav className={classes.drawer} aria-label="mailbox folders">
