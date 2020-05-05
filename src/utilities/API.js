@@ -1,3 +1,20 @@
+/* global Backend */
+
+const BASE_URL = "http://localhost:7001";
+const backend = new Backend(BASE_URL);
+
+export const getCurrentUser = async () => {
+  return backend.get("/user/current");
+};
+
+export const login = async (username, password) => {
+  return backend.post("/user/login", { username, password });
+};
+
+export const getClinic = async (ownerId) => {
+  return backend.post("/clinic/find", { conditions: { ownerId } });
+};
+
 // input types
 const FIRST_NAME = "FIRST_NAME";
 const LAST_NAME = "LAST_NAME";
