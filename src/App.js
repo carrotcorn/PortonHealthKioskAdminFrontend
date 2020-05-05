@@ -19,8 +19,13 @@ import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
 
+import {
+  getCurrentUser,
+  registerUser,
+  auth
+} from "./utilities/API";
 
-import AuthAPI from './API/Backend';
+
 import Auth, { initialState } from './reducers/Auth';
 
 const useStyles = makeStyles((theme) => ({
@@ -53,13 +58,12 @@ export default function App() {
       let user;
 
       try {
-        var response = await AuthAPI.get('/user/current');
-        if (response.success) { 
-          user = response.result;
-        }
-      } catch (e) {
-        // Restoring token failed
+        user = await getCurrentUser();
       }
+      catch(e) {
+        console.log(e.message);
+      }
+
 
       // After restoring token, we may need to validate it in production apps
 
@@ -76,20 +80,12 @@ export default function App() {
     () => ({
       signIn: async data => {
         try {
-          console.log(data);
-          var response = await AuthAPI.post('/user/login', data);
-          if (response.success) { 
-            response = await AuthAPI.get('/user/current');
-            if (response.success) 
-              dispatch({ type: 'SIGN_IN', token: response.result });
-          }
-          else {
-            console.log(response.status);
-            dispatch({ type: 'AUTH_ERR', errMsg: "Credential or input data is invalid" });
-          }
+          await auth(data);
+          const user = await getCurrentUser();
+          dispatch({ type: 'SIGN_IN', token: user });
         }
         catch (error) {
-            console.log(error.response);
+          dispatch({ type: 'AUTH_ERR', errMsg: error.message });
         }
       },
       signOut: async () => {
@@ -97,22 +93,11 @@ export default function App() {
       },
       signUp: async data => {
         try {
-          const response = await AuthAPI.post('/register',data);
-          if (response.success) { 
-            dispatch({ type: 'SIGN_IN', token: response.data.token });
-            try {
-              await sessionStorage.setItem('userToken', response.data.token);
-            } catch (e) {
-              // Restoring token failed
-            }
-          }
-          else {
-            console.log(response.status);
-            dispatch({ type: 'AUTH_ERR', errMsg: "User exists or input data is invalid" });
-          }
+          const user = await registerUser(data);
+          dispatch({ type: 'SIGN_IN', token: user });
         }
         catch (error) {
-          console.log(error);
+          dispatch({ type: 'AUTH_ERR', errMsg: error.message });
         }
       },
     }),
