@@ -20,7 +20,7 @@ export const getAllCheckInFields = async () => {
  */
 export const setUserCheckInFields = async (clinic, fields) => {
   console.log(fields);
-  const response = await backend.put('/clinic/update', { conditions: { "formFields": fields, "_id": clinic._id }});
+  const response = await backend.put('/clinic/update', { conditions: { "_id": clinic._id }, doc: {"formFields": fields} });
 
   if (response.success)  
     fields = response.result.formFields;
@@ -79,6 +79,10 @@ export const auth = async (data) => {
     throw response.error;  
 
   return userId;
+};
+
+export const logout = async () => {
+  await backend.post('/user/logout');
 };
 
 export const registerUser = async (data) => {

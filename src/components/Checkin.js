@@ -98,8 +98,6 @@ export default function CheckInFormFields(props) {
     catch (e) {
       console.log(e.message);
     }
-
-    props.onSubmitted();
   };
 
   return state ? (

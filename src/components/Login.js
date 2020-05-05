@@ -9,7 +9,7 @@ import {
 import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import { makeStyles } from "@material-ui/core/styles";
 import { useForm } from "react-hook-form";
-import { login, getCurrentUser } from "../utilities/API";
+import { auth, getCurrentUser } from "../utilities/API";
 import { UserContext } from "../Contexts";
 import { useHistory } from "react-router-dom";
 
@@ -44,16 +44,12 @@ export default function Login() {
 
   const onSubmit = async ({ username, password }, setUser) => {
     try {
-      const result = await login(username, password);
-      if (result.success) {
-        const response = await getCurrentUser();
-        setUser(response.result);
-        history.push("/");
-      } else {
-        window.alert(result.error.message);
-      }
+      await auth({username, password});
+      const user = await getCurrentUser();
+      setUser(user);
+      history.push("/");
     } catch (e) {
-      console.log(e);
+      console.log(e.message);
     }
   };
 
