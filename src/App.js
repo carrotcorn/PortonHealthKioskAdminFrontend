@@ -1,59 +1,100 @@
-import React, { Component } from "react";
-import Navbar from "./utilities/Navbar";
-import Login from "./components/Login";
-import Footer from "./utilities/Footer";
-import AppointmentList from "./components/AppointmentList";
-import ClinicList from "./components/ClinicList";
-import AddClinic from "./components/AddClinic";
-import DoctorList from "./components/DoctorList";
-import AddDoctor from "./components/AddDoctor";
-import DynamicCheckin from "./components/DynamicCheckin";
+import React from "react";
+import Typography from "@material-ui/core/Typography";
+import Layout from "./Layout";
 
-export default class App extends Component {
-  constructor() {
-    super();
-    this.state = {
-      isAuthorized: false,
-    };
-  }
-  componentDidMount() {
-    console.log("start");
-    if (sessionStorage.getItem("isAuthorized") === "yes") {
-      this.setState({ isAuthorized: true });
-    }
-  }
-  render() {
-    const isAllowed = sessionStorage.getItem("isAuthorized");
-    console.log(`isAllowed: ${isAllowed}`);
-
-    return (
-      <div className="App">
-        <div>
-          <Navbar />
-          <Route path="/" />
-          {this.state.isAuthorized ? (
-            <div>
-              <Route exact path="/DynamicCheckin" component={DynamicCheckin} />
-
-              <Route
-                exact
-                path="/AppointmentList"
-                component={AppointmentList}
-              />
-              <Route exact path="/ClinicList" component={ClinicList} />
-              <Route exact path="/AddClinic" component={AddClinic} />
-              <Route exact path="/DoctorList" component={DoctorList} />
-              <Route exact path="/AddDoctor" component={AddDoctor} />
-            </div>
-          ) : (
-            <div>
-              <Route exact path="/" component={Login} />
-              <Route exact path="/Login" component={Login} />
-            </div>
-          )}
-        </div>
-        <Footer />
-      </div>
-    );
-  }
+function App(props) {
+  return (
+    <Layout>
+      <Typography paragraph>
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
+        tempor incididunt ut labore et dolore magna aliqua. Rhoncus dolor purus
+        non enim praesent elementum facilisis leo vel. Risus at ultrices mi
+        tempus imperdiet. Semper risus in hendrerit gravida rutrum quisque non
+        tellus. Convallis convallis tellus id interdum velit laoreet id donec
+        ultrices. Odio morbi quis commodo odio aenean sed adipiscing. Amet nisl
+        suscipit adipiscing bibendum est ultricies integer quis. Cursus euismod
+        quis viverra nibh cras. Metus vulputate eu scelerisque felis imperdiet
+        proin fermentum leo. Mauris commodo quis imperdiet massa tincidunt. Cras
+        tincidunt lobortis feugiat vivamus at augue. At augue eget arcu dictum
+        varius duis at consectetur lorem. Velit sed ullamcorper morbi tincidunt.
+        Lorem donec massa sapien faucibus et molestie ac.
+      </Typography>
+      <Typography paragraph>
+        Consequat mauris nunc congue nisi vitae suscipit. Fringilla est
+        ullamcorper eget nulla facilisi etiam dignissim diam. Pulvinar elementum
+        integer enim neque volutpat ac tincidunt. Ornare suspendisse sed nisi
+        lacus sed viverra tellus. Purus sit amet volutpat consequat mauris.
+        Elementum eu facilisis sed odio morbi. Euismod lacinia at quis risus sed
+        vulputate odio. Morbi tincidunt ornare massa eget egestas purus viverra
+        accumsan in. In hendrerit gravida rutrum quisque non tellus orci ac.
+        Pellentesque nec nam aliquam sem et tortor. Habitant morbi tristique
+        senectus et. Adipiscing elit duis tristique sollicitudin nibh sit.
+        Ornare aenean euismod elementum nisi quis eleifend. Commodo viverra
+        maecenas accumsan lacus vel facilisis. Nulla posuere sollicitudin
+        aliquam ultrices sagittis orci a.
+      </Typography>
+    </Layout>
+  );
 }
+
+export default App;
+
+// import React, { Component } from "react";
+// import Navbar from "./utilities/Navbar";
+// import Login from "./components/Login";
+// import Footer from "./utilities/Footer";
+// import AppointmentList from "./components/AppointmentList";
+// import ClinicList from "./components/ClinicList";
+// import AddClinic from "./components/AddClinic";
+// import DoctorList from "./components/DoctorList";
+// import AddDoctor from "./components/AddDoctor";
+// import DynamicCheckin from "./components/DynamicCheckin";
+
+// export default class App extends Component {
+//   constructor() {
+//     super();
+//     this.state = {
+//       isAuthorized: false,
+//     };
+//   }
+//   componentDidMount() {
+//     console.log("start");
+//     if (sessionStorage.getItem("isAuthorized") === "yes") {
+//       this.setState({ isAuthorized: true });
+//     }
+//   }
+//   render() {
+//     const isAllowed = sessionStorage.getItem("isAuthorized");
+//     console.log(`isAllowed: ${isAllowed}`);
+
+//     return (
+//       <div className="App">
+//         <div>
+//           <Navbar />
+//           <Route path="/" />
+//           {this.state.isAuthorized ? (
+//             <div>
+//               <Route exact path="/DynamicCheckin" component={DynamicCheckin} />
+
+//               <Route
+//                 exact
+//                 path="/AppointmentList"
+//                 component={AppointmentList}
+//               />
+//               <Route exact path="/ClinicList" component={ClinicList} />
+//               <Route exact path="/AddClinic" component={AddClinic} />
+//               <Route exact path="/DoctorList" component={DoctorList} />
+//               <Route exact path="/AddDoctor" component={AddDoctor} />
+//             </div>
+//           ) : (
+//             <div>
+//               <Route exact path="/" component={Login} />
+//               <Route exact path="/Login" component={Login} />
+//             </div>
+//           )}
+//         </div>
+//         <Footer />
+//       </div>
+//     );
+//   }
+// }
