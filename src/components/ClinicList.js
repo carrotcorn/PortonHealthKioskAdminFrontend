@@ -10,6 +10,7 @@ import TableRow from "@material-ui/core/TableRow";
 import Button from "@material-ui/core/Button";
 import Paper from "@material-ui/core/Paper";
 import Switch from "@material-ui/core/Switch";
+import API from '../API/Backend';
 
 const useStyles = makeStyles({
   table: {
@@ -54,10 +55,6 @@ export default function ClinicList() {
   };
 
   console.log(state);
-
-  useEffect(() => {
-    getClinics();
-  }, []);
 
   return (
     <div>
@@ -112,3 +109,4 @@ export default function ClinicList() {
     </div>
   );
 }
+

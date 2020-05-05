@@ -7,6 +7,7 @@ import TableContainer from "@material-ui/core/TableContainer";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import Paper from "@material-ui/core/Paper";
+import API from '../API/Backend';
 import { format } from "date-fns";
 import { differenceInYears } from "date-fns";
 
@@ -50,9 +51,6 @@ export default function AppointmentList() {
       })
       .catch((error) => console.log("error", error));
   }
-  useEffect(() => {
-    getAppointments();
-  }, []);
 
   return (
     <TableContainer component={Paper}>
@@ -60,12 +58,7 @@ export default function AppointmentList() {
         <TableHead>
           <TableRow>
             <TableCell>Start Time</TableCell>
-            <TableCell align='right'>End Time</TableCell>
-            <TableCell align='right'>Family Name</TableCell>
-            <TableCell align='right'>Given Name</TableCell>
-            <TableCell align='right'>Age</TableCell>
-            <TableCell align='right'>Phone</TableCell>
-            <TableCell align='right'>Checked-In</TableCell>
+            <TableCell>Checked-In</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
