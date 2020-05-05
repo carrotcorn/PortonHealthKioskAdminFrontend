@@ -8,8 +8,9 @@ import Checkbox from "@material-ui/core/Checkbox";
 import Button from "@material-ui/core/Button";
 import {
   getAllCheckInFields,
-  getUserCheckInFields,
   setUserCheckInFields,
+  getCurrentUser,
+  getClinicByOwner,
 } from "../utilities/API";
 import { CircularProgress, Paper } from "@material-ui/core";
 
@@ -32,23 +33,41 @@ export default function CheckInFormFields(props) {
   const classes = useStyles();
   const [state, setState] = React.useState();
   const [error, setError] = React.useState(false);
+  const [clinic, setClinic] = React.useState({});
 
   useEffect(() => {
     // TODO: consider moving this logic to the api/backend
-    const fields = getAllCheckInFields() || [];
-    const userFields = getUserCheckInFields() || [];
+    let fields;
+    let userFields;
+    let configuredInputTypes;
 
-    let configuredInputTypes = new Set();
-    for (let userField of userFields) {
-      configuredInputTypes.add(userField.inputType);
+    (async () => {
+    try {
+      const user = await getCurrentUser();
+      const clinic = await getClinicByOwner(user._id);
+      setClinic(clinic);
+      userFields = clinic.formFields || [];      
+      let configuredInputTypes = new Set();
+      for (let userField of userFields) {
+        configuredInputTypes.add(userField.inputType);
+      }
+      fields = await getAllCheckInFields() || [];
+
+      setState(
+        fields.map((field) => ({
+          ...field,
+          active: configuredInputTypes.has(field.inputType),
+        }))
+      );
+  
+    }
+    catch (error) {
+      console.log(error.message);
     }
 
-    setState(
-      fields.map((field) => ({
-        ...field,
-        active: configuredInputTypes.has(field.inputType),
-      }))
-    );
+    })();
+
+
   }, []);
 
   const handleChange = (event) => {
@@ -61,7 +80,7 @@ export default function CheckInFormFields(props) {
     );
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
 
     const checked = state.filter((field) => field.active);
@@ -71,11 +90,14 @@ export default function CheckInFormFields(props) {
       return;
     }
 
-    setUserCheckInFields(
-      checked.map(({ inputType, name }) => ({ inputType, name }))
-    );
-
-    props.onSubmitted();
+    try {
+      await setUserCheckInFields(clinic, 
+        checked.map(({ _id }) => ({ _id }))
+      );
+    }
+    catch (e) {
+      console.log(e.message);
+    }
   };
 
   return state ? (
@@ -88,13 +110,14 @@ export default function CheckInFormFields(props) {
           className={classes.checkboxes}
         >
           <FormGroup>
-            {state.map(({ inputType, name, label, active }) => (
+            {state.map(({ _id, inputType, name, label, active }) => (
               <FormControlLabel
                 control={
                   <Checkbox
                     checked={active}
                     onChange={handleChange}
                     name={name}
+                    _id={_id}
                   />
                 }
                 label={label}

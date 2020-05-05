@@ -1,5 +1,6 @@
 import React, { useContext } from "react";
 import AppBar from "@material-ui/core/AppBar";
+import Button from "@material-ui/core/Button";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import Divider from "@material-ui/core/Divider";
 import Drawer from "@material-ui/core/Drawer";
@@ -8,6 +9,7 @@ import IconButton from "@material-ui/core/IconButton";
 import List from "@material-ui/core/List";
 import MenuIcon from "@material-ui/icons/Menu";
 import HomeIcon from "@material-ui/icons/Home";
+import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import SettingsIcon from "@material-ui/icons/Settings";
 import AssignmentIcon from "@material-ui/icons/Assignment";
 import LocalHospitalIcon from "@material-ui/icons/LocalHospital";
@@ -17,6 +19,13 @@ import { makeStyles, useTheme } from "@material-ui/core/styles";
 import ListItemLink from "./utilities/ListItemLink";
 import { Route } from "react-router";
 import { UserContext } from "./Contexts";
+import { TableContainer } from "@material-ui/core";
+import Table from "@material-ui/core/Table";
+import TableCell from "@material-ui/core/TableCell";
+import TableHead from "@material-ui/core/TableHead";
+import TableRow from "@material-ui/core/TableRow";
+import { logout } from "./utilities/API";
+import { useHistory } from "react-router-dom";
 
 const drawerWidth = 240;
 
@@ -68,11 +77,11 @@ const navLinks = [
     icon: <AssignmentIcon />,
   },
   {
-    path: "/configuration",
-    name: "Configuration",
+    path: "/checkin",
+    name: "Checkin",
     roles: ["clinic"],
     icon: <SettingsIcon />,
-  },
+  }
 ];
 
 function Layout(props) {
@@ -80,7 +89,8 @@ function Layout(props) {
   const classes = useStyles();
   const theme = useTheme();
   const [mobileOpen, setMobileOpen] = React.useState(false);
-  const userContext = useContext(UserContext);
+  const { user, setUser }  = useContext(UserContext);
+  const history = useHistory();
 
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
@@ -97,7 +107,7 @@ function Layout(props) {
               return true;
             } else {
               for (let role of roles) {
-                if (userContext.user && userContext.user.roles.includes(role)) {
+                if (user && user.roles.includes(role)) {
                   return true;
                 }
               }
@@ -114,12 +124,23 @@ function Layout(props) {
   const container =
     window !== undefined ? () => window().document.body : undefined;
 
+    const Logout = () => {
+      try {
+        logout();
+        setUser(null);
+        history.push("/");
+      }
+      catch (error) {
+        console.log(error.message);
+      }
+    };
+  
   return (
     <div className={classes.root}>
       <CssBaseline />
       <AppBar
         position="fixed"
-        className={userContext.user ? classes.appBar : null}
+        className={user ? classes.appBar : null}
       >
         <Toolbar>
           <IconButton
@@ -149,15 +170,27 @@ function Layout(props) {
                     : "Not Found";
               }
               return (
-                <Typography variant="h5" gutterBottom>
+                <TableContainer>
+                  <Table>
+            <TableHead>
+            <TableRow>
+              <TableCell> 
+                 <Typography variant="h5" gutterBottom>
                   {title}
                 </Typography>
+            </TableCell>
+              <TableCell align='right'>{user && <><ExitToAppIcon /><Button onClick={()=> Logout()}>Logout</Button></>} 
+               </TableCell>
+            </TableRow>
+          </TableHead>   
+          </Table>       
+          </TableContainer>      
               );
             }}
           </Route>
         </Toolbar>
       </AppBar>
-      {userContext.user && (
+      {user && (
         <nav className={classes.drawer} aria-label="mailbox folders">
           <Hidden smUp implementation="js">
             <Drawer
@@ -196,4 +229,5 @@ function Layout(props) {
     </div>
   );
 }
+
 export default Layout;
