@@ -1,5 +1,5 @@
 /* global Backend */
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, setState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
@@ -22,27 +22,39 @@ export default function ClinicList() {
   const classes = useStyles();
 
   const [listClinic, setClinic] = useState([]);
-  const [toggle, setToggle] = useState(false);
+  const [state, setState] = useState({
+    // toggle: false,
+  });
 
-  useEffect(() => {
-    async function getClinics() {
-      try {
-        const response = await API.get('/clinic/find');
-        if (response.success) { 
-          console.log(response.result);
-          setClinic(response.result);
-        }
-        else {
-          console.log(response.status);
-        }
+  async function getClinics() {
+    const BASE_URL = "http://localhost:7001";
+
+    const backend = new Backend(BASE_URL);
+    try {
+      const result = await backend.get("/public/clinic/find");
+      if (result.success) {
+        setClinic(result);
+        console.log("Clinics:", result);
+      } else {
+        window.alert(result.error.message);
       }
-      catch (error) {
-          console.log(error.response);
-      }
+    } catch (e) {
+      console.log(e);
     }
-  
-    getClinics();
-  }, []);
+  }
+
+  const disableClinic = (clinicId, event) => {
+    setState({
+      ...state,
+      // all activated buttons within object, "..." keeps the previous states within the object,
+      // so it doesnt rewrite the object evert time
+      // [clinicId]: event.target.value,
+      [clinicId]: event.target.checked,
+    });
+    console.log("P00p");
+  };
+
+  console.log(state);
 
   function disableClinic() {}
 
@@ -59,7 +71,6 @@ export default function ClinicList() {
               <TableCell>Enable/Disable</TableCell>
               <TableCell>Clinic Name</TableCell>
               <TableCell align='right'>Phone</TableCell>
-              <TableCell align='right'>Email</TableCell>
               <TableCell align='right'>Street Address</TableCell>
               <TableCell align='right'>city</TableCell>
               <TableCell align='right'>Postal Code</TableCell>
@@ -67,21 +78,27 @@ export default function ClinicList() {
           </TableHead>
 
           <TableBody>
-            {listClinic &&
-              listClinic.map((row) => {
+            {listClinic.result &&
+              listClinic.result.map((row) => {
                 return (
-                  <TableRow key={row.name}>
+                  <TableRow key={row._id}>
                     <TableCell padding='switch'>
-                      <Switch onClick={disableClinic} key={row.disable} />
+                      <Switch
+                        checked={state[row._id]} //[] allows me to access the object dynamically
+                        onChange={(event) => {
+                          disableClinic(row._id, event);
+                        }}
+                        value={row._id}
+                        name='toggle'
+                      />
                     </TableCell>
                     <TableCell component='th' scope='row'>
                       {row.name}
                     </TableCell>
                     <TableCell align='right'>{row.phone}</TableCell>
-                    <TableCell align='right'>{row.email}</TableCell>
-                    <TableCell align='right'>{row.streetAddress}</TableCell>
-                    <TableCell align='right'>{row.city}</TableCell>
-                    <TableCell align='right'>{row.postcode}</TableCell>
+                    <TableCell align='right'>{row.address.street}</TableCell>
+                    <TableCell align='right'>{row.address.city}</TableCell>
+                    <TableCell align='right'>{row.address.postcode}</TableCell>
                   </TableRow>
                 );
               })}
@@ -94,3 +111,4 @@ export default function ClinicList() {
     </div>
   );
 }
+

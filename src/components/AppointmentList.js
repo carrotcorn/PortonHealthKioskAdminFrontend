@@ -8,6 +8,8 @@ import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import Paper from "@material-ui/core/Paper";
 import API from '../API/Backend';
+import { format } from "date-fns";
+import { differenceInYears } from "date-fns";
 
 const useStyles = makeStyles({
   table: {
@@ -20,32 +22,35 @@ export default function AppointmentList() {
 
   const [appointments, setAppointments] = useState([]);
 
-  useEffect(() => {
-    async function getAppointments() {
-      try {
-        var response = await API.get('/user/current');
-        if (response.success) { 
-          const user = response.result;
-          response = await API.post('/clinic/find', { conditions: { ownerId: user._id}});
-          if (response.success) {
-            const clinic = response.result;
-            console.log(clinic);                         
-            response = await API.post('/appointment/find', { conditions: {clinicId: clinic._id}});
-             setAppointments(response.result);
-             console.log(response.result);             
-          }
+  async function getAppointments() {
+    var myHeaders = new Headers();
+    myHeaders.append("Content-Type", "application/json");
+    myHeaders.append("Content-Type", "application/json");
+    myHeaders.append("Access-Control-Allow-Origin", "*");
+    myHeaders.append(
+      "Access-Control-Allow-Headers",
+      "Origin, X-Requested-With, Content-Type, Accept"
+    );
+    var requestOptions = {
+      method: "GET",
+      headers: myHeaders,
+      redirect: "follow",
+    };
+    console.log("REQUEST:", requestOptions);
+    fetch("http://localhost:7001/public/appointment/find", requestOptions)
+      .then((response) => response.text())
+      .then((result) => {
+        const theAppointments = JSON.parse(result);
+        console.log("the appointments", theAppointments);
+        console.log(typeof theAppointments);
+
+        if (theAppointments.success) {
+          setListAppointments(theAppointments.result); //this allows me to not throw an error when running
+          console.log(JSON.stringify(listAppointment));
         }
-        else {
-          console.log(response.status);
-        }
-      }
-      catch (error) {
-          console.log(error.response);
-      }
-    }
-  
-    getAppointments();
-  }, []);
+      })
+      .catch((error) => console.log("error", error));
+  }
 
   return (
     <TableContainer component={Paper}>
@@ -60,10 +65,28 @@ export default function AppointmentList() {
           {appointments &&
             appointments.map((row) => {
               return (
-                //this return in necessary
-                <TableRow key={row.time.start}>
-                  <TableCell>{(new Date(row.time.start)).toLocaleString()}</TableCell>
-                  <TableCell>{row.checkedIn ? "Checked-In" : "Not Checked-In"}</TableCell>
+                //this return in necessary  TO ADD INFORMATION IN A CHILD JSON, DO ROW."OBJECT"."CHILDOBJECT"
+                <TableRow key={row._id}>
+                  <TableCell component='th' scope='row'>
+                    {format(new Date(row.time.start), "p")}
+                  </TableCell>
+                  <TableCell align='right'>
+                    {format(new Date(row.time.end), "p")}
+                  </TableCell>
+                  <TableCell align='right'>
+                    {row.patientId.familyName}
+                  </TableCell>
+                  <TableCell align='right'>{row.patientId.givenName}</TableCell>
+                  <TableCell align='right'>
+                    {differenceInYears(
+                      new Date(),
+                      new Date(row.patientId.birthday)
+                    )}
+                  </TableCell>
+                  <TableCell align='right'>{row.patientId.phone}</TableCell>
+                  <TableCell align='right'>
+                    {row.checkedIn ? "Checked-In" : "Not Checked-In"}
+                  </TableCell>
                 </TableRow>
               );
             })}
