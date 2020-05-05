@@ -139,9 +139,14 @@ function Layout(props) {
               } else if (location.pathname === "/logout") {
                 title = "Logout";
               } else {
-                title = navLinks.filter(
+                const matchingRoutes = navLinks.filter(
                   (link) => link.path === location.pathname
-                )[0].name;
+                );
+
+                title =
+                  matchingRoutes.length > 0
+                    ? matchingRoutes[0].name
+                    : "Not Found";
               }
               return (
                 <Typography variant="h5" gutterBottom>

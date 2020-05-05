@@ -19,7 +19,6 @@ function App(props) {
       try {
         const response = await getCurrentUser();
         if (response.success) {
-          console.log(response.result);
           setUser(response.result);
         }
         setLoading(false);
@@ -42,16 +41,16 @@ function App(props) {
           <PrivateRoute exact path="/">
             <Typography>Home</Typography>
           </PrivateRoute>
-          <PrivateRoute exact path="/appointments">
+          <PrivateRoute exact path="/appointments" roles={["clinic"]}>
             <AppointmentList />
           </PrivateRoute>
-          <PrivateRoute exact path="/clinics">
+          <PrivateRoute exact path="/clinics" roles={["admin"]}>
             <ClinicList />
           </PrivateRoute>
+          <PrivateRoute exact path="/configuration" roles={["clinic"]}>
+            <Typography>Check In Config Form</Typography>
+          </PrivateRoute>
           <PrivateRoute path="*" component={PageNotFound} />
-          {/* <Route exact path="/AddClinic" component={AddClinic} /> */}
-          {/* <Route exact path="/DoctorList" component={DoctorList} /> */}
-          {/* <Route exact path="/AddDoctor" component={AddDoctor} /> */}
         </Switch>
       </Layout>
     </UserContext.Provider>
