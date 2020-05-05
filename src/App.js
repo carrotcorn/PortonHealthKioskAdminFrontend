@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import { BrowserRouter as Router, Route } from "react-router-dom";
 import Navbar from "./utilities/Navbar";
 import Login from "./components/Login";
 import Footer from "./utilities/Footer";
@@ -28,37 +27,31 @@ export default class App extends Component {
     console.log(`isAllowed: ${isAllowed}`);
 
     return (
-      <div className='App'>
-        <Router>
-          <div>
-            <Navbar />
-            <Route path='/' />
-            {this.state.isAuthorized ? (
-              <div>
-                <Route
-                  exact
-                  path='/DynamicCheckin'
-                  component={DynamicCheckin}
-                />
+      <div className="App">
+        <div>
+          <Navbar />
+          <Route path="/" />
+          {this.state.isAuthorized ? (
+            <div>
+              <Route exact path="/DynamicCheckin" component={DynamicCheckin} />
 
-                <Route
-                  exact
-                  path='/AppointmentList'
-                  component={AppointmentList}
-                />
-                <Route exact path='/ClinicList' component={ClinicList} />
-                <Route exact path='/AddClinic' component={AddClinic} />
-                <Route exact path='/DoctorList' component={DoctorList} />
-                <Route exact path='/AddDoctor' component={AddDoctor} />
-              </div>
-            ) : (
-              <div>
-                <Route exact path='/' component={Login} />
-                <Route exact path='/Login' component={Login} />
-              </div>
-            )}
-          </div>
-        </Router>
+              <Route
+                exact
+                path="/AppointmentList"
+                component={AppointmentList}
+              />
+              <Route exact path="/ClinicList" component={ClinicList} />
+              <Route exact path="/AddClinic" component={AddClinic} />
+              <Route exact path="/DoctorList" component={DoctorList} />
+              <Route exact path="/AddDoctor" component={AddDoctor} />
+            </div>
+          ) : (
+            <div>
+              <Route exact path="/" component={Login} />
+              <Route exact path="/Login" component={Login} />
+            </div>
+          )}
+        </div>
         <Footer />
       </div>
     );
