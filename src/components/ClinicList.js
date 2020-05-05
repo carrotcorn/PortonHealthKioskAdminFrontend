@@ -56,8 +56,6 @@ export default function ClinicList() {
 
   console.log(state);
 
-  function disableClinic() {}
-
   return (
     <div>
       <TableContainer component={Paper}>

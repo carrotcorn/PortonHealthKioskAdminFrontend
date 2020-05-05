@@ -20,7 +20,7 @@ const useStyles = makeStyles({
 export default function AppointmentList() {
   const classes = useStyles();
 
-  const [appointments, setAppointments] = useState([]);
+  const [listAppointment, setListAppointments] = useState([]);
 
   async function getAppointments() {
     var myHeaders = new Headers();
@@ -62,8 +62,8 @@ export default function AppointmentList() {
           </TableRow>
         </TableHead>
         <TableBody>
-          {appointments &&
-            appointments.map((row) => {
+          {listAppointment &&
+            listAppointment.map((row) => {
               return (
                 //this return in necessary  TO ADD INFORMATION IN A CHILD JSON, DO ROW."OBJECT"."CHILDOBJECT"
                 <TableRow key={row._id}>
