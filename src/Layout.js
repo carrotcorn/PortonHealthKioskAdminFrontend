@@ -54,7 +54,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const navLinks = [
-  { path: "/", name: "Home", icon: <HomeIcon /> },
+  { path: "/", name: "Home", icon: <HomeIcon /> }, // no role = no restriction
   {
     path: "/clinics",
     name: "Clinics",
@@ -91,9 +91,22 @@ function Layout(props) {
       <div className={classes.toolbar} />
       <Divider />
       <List>
-        {navLinks.map(({ path, name, icon }) => (
-          <ListItemLink key={path} to={path} primary={name} icon={icon} />
-        ))}
+        {navLinks
+          .filter(({ roles }) => {
+            if (!roles) {
+              return true;
+            } else {
+              for (let role of roles) {
+                if (userContext.user && userContext.user.roles.includes(role)) {
+                  return true;
+                }
+              }
+              return false;
+            }
+          })
+          .map(({ path, name, icon }) => (
+            <ListItemLink key={path} to={path} primary={name} icon={icon} />
+          ))}
       </List>
     </div>
   );
