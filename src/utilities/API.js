@@ -69,6 +69,18 @@ export const getClinicByOwner = async (id) => {
   return clinic[0];
 };
 
+export const getAppointmentsByClinic = async (id) => {
+  let appointments;
+
+  const response = await backend.post('/appointment/find', { conditions: { "clinicId": id} });
+  if (response.success)  
+    appointments = response.result;
+  else 
+    throw response.error;
+
+  return appointments;
+};
+
 export const auth = async (data) => {
   let userId;
 
