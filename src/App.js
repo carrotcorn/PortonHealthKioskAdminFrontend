@@ -5,34 +5,26 @@ import Checkin from "./components/Checkin";
 import PageNotFound from "./components/PageNotFound";
 import Login from "./components/Login";
 import Layout from "./Layout";
-import { Route, Switch, useHistory } from "react-router-dom";
+import { Route, Switch } from "react-router-dom";
 import { UserContext } from "./Contexts";
 import { getCurrentUser } from "./utilities/API";
-import { CircularProgress, Typography } from "@material-ui/core";
+import { Typography } from "@material-ui/core";
 import PrivateRoute from "./utilities/PrivateRoute";
 
 function App(props) {
   const [user, setUser] = useState();
-  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchUser = async () => {
       try {
         const user = await getCurrentUser();
         setUser(user);
-        setLoading(false);
       } catch (e) {
         console.log(e.message);
-        setLoading(false);        
       } 
     };
     fetchUser();
   }, []);
-
-
-  if (loading) {
-    return <CircularProgress />;
-  }
 
   return (
     <UserContext.Provider value={{ user, setUser}}>

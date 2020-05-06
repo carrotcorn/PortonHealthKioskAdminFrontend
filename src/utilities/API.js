@@ -57,6 +57,30 @@ export const getCurrentUser = async () => {
   return user;
 };
 
+export const getUser = async (id) => {
+  let user;
+
+  const response = await backend.post('/user/find', { conditions: { "_id": id}} );
+  if (response.success)  
+    user = response.result;
+  else 
+    throw response.error;
+
+  return user;
+};
+
+export const changeUserStatus = async (id, status) => {
+  let user;
+
+  const response = await backend.put('/user/update', { conditions: { "_id": id }, doc: {"disabled": status} } );
+  if (response.success)  
+    user = response.result;
+  else 
+    throw response.error;
+
+  return user;
+};
+
 export const getClinicByOwner = async (id) => {
   let clinic;
 
@@ -67,6 +91,18 @@ export const getClinicByOwner = async (id) => {
     throw response.error;
 
   return clinic[0];
+};
+
+export const getClinics = async () => {
+  let clinics;
+
+  const response = await backend.get('/clinic/find');
+  if (response.success)  
+    clinics = response.result;
+  else 
+    throw response.error;
+
+  return clinics;
 };
 
 export const getAppointmentsByClinic = async (id) => {
