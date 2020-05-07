@@ -10,9 +10,12 @@ import { UserContext } from "./Contexts";
 import { getCurrentUser } from "./utilities/API";
 import { Typography } from "@material-ui/core";
 import PrivateRoute from "./utilities/PrivateRoute";
+import { logout } from "./utilities/API";
+import { useHistory } from "react-router-dom";
 
 function App(props) {
   const [user, setUser] = useState();
+  const history = useHistory();
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -26,8 +29,19 @@ function App(props) {
     fetchUser();
   }, []);
 
+  const Logout = async () => {
+    try {
+      await logout();
+      setUser(null);
+      history.push("/");
+    }
+    catch (error) {
+      console.log(error.message);
+    }
+  };
+
   return (
-    <UserContext.Provider value={{ user, setUser}}>
+    <UserContext.Provider value={{ user, setUser, Logout}}>
       <Layout>
         <Switch>
           <Route path="/login" component={Login} />

@@ -36,7 +36,7 @@ export default function ClinicList() {
         clinicsData.forEach( (clinic) => {
           (async ()=> {
             const user = await getUser(clinic.ownerId);
-            if (user.disabled) {
+            if (!user.disabled) {
               console.log(clinic._id);
               setState((state)=>({...state, [clinic._id]:true}));
             }
@@ -54,10 +54,10 @@ export default function ClinicList() {
 
   const handleChange = async (event) => {
     setState({ ...state, [event.target.name]: event.target.checked });
-    let disabled = false;
+    let disabled = true;
 
     if (event.target.checked)
-      disabled = true;
+      disabled = false;
 
     console.log(disabled);
     try {
@@ -80,7 +80,7 @@ export default function ClinicList() {
         >
           <TableHead>
             <TableRow>
-              <TableCell>Enable/Disable</TableCell>
+              <TableCell>Enabled</TableCell>
               <TableCell>Clinic Name</TableCell>
               <TableCell align='right'>Phone</TableCell>
               <TableCell align='right'>Street Address</TableCell>

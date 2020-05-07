@@ -24,8 +24,6 @@ import Table from "@material-ui/core/Table";
 import TableCell from "@material-ui/core/TableCell";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
-import { logout } from "./utilities/API";
-import { useHistory } from "react-router-dom";
 
 const drawerWidth = 240;
 
@@ -89,8 +87,7 @@ function Layout(props) {
   const classes = useStyles();
   const theme = useTheme();
   const [mobileOpen, setMobileOpen] = React.useState(false);
-  const { user, setUser }  = useContext(UserContext);
-  const history = useHistory();
+  const { user, Logout }  = useContext(UserContext);
 
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
@@ -124,17 +121,6 @@ function Layout(props) {
   const container =
     window !== undefined ? () => window().document.body : undefined;
 
-    const Logout = () => {
-      try {
-        logout();
-        setUser(null);
-        history.push("/");
-      }
-      catch (error) {
-        console.log(error.message);
-      }
-    };
-  
   return (
     <div className={classes.root}>
       <CssBaseline />
