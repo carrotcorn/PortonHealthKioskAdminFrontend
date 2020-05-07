@@ -25,27 +25,21 @@ const useStyles = makeStyles({
 
 export default function ClinicList() {
   const classes = useStyles();
+  const [state, setState] = useState([]);  
   const [clinics, setClinics] = useState([]);
-  const [state, setState] = useState();
 
   useEffect(() => {
     const fetchClinics = async () => {
       try {
         const clinicsData = await getClinics();
+        var clinicStatusList = [];
 
-        clinicsData.forEach(clinic => {
-          (async () => {
+        clinicsData.forEach( async (clinic) => {
             const user = await getUser(clinic.ownerId);
             clinic.disabled = user.disabled;
-          })();
+            setState({ ...state, [clinic._id]: clinic.disabled });            
         });
 
-        setState(
-          clinicsData.map((clinic) => ({
-            [clinic._id]: clinic.disabled
-          }))
-        );
-  
         setClinics(clinicsData);
       } catch (e) {
         console.log(e.message);
@@ -94,7 +88,7 @@ export default function ClinicList() {
                   <TableRow key={row._id}>
                     <TableCell>
                       <Switch
-                        checked={state[row._id] || false} 
+                        checked={state[row._id]||false} 
                         onChange={(event) => {
                           handleChange(event, row.disabled);
                         }}
