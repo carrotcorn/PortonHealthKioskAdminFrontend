@@ -25,19 +25,22 @@ const useStyles = makeStyles({
 
 export default function ClinicList() {
   const classes = useStyles();
-  const [state, setState] = useState([]);  
+  const [state, setState] = useState({});  
   const [clinics, setClinics] = useState([]);
 
   useEffect(() => {
     const fetchClinics = async () => {
       try {
         const clinicsData = await getClinics();
-        var clinicStatusList = [];
 
-        clinicsData.forEach( async (clinic) => {
+        clinicsData.forEach( (clinic) => {
+          (async ()=> {
             const user = await getUser(clinic.ownerId);
-            clinic.disabled = user.disabled;
-            setState({ ...state, [clinic._id]: clinic.disabled });            
+            if (user.disabled) {
+              console.log(clinic._id);
+              setState((state)=>({...state, [clinic._id]:true}));
+            }
+          })();
         });
 
         setClinics(clinicsData);
@@ -49,17 +52,22 @@ export default function ClinicList() {
     fetchClinics();
   }, []); 
 
-  const handleChange = async (event, disabled) => {
+  const handleChange = async (event) => {
     setState({ ...state, [event.target.name]: event.target.checked });
+    let disabled = false;
 
+    if (event.target.checked)
+      disabled = true;
+
+    console.log(disabled);
     try {
       const clinic = await getClinic(event.target.name);
       const user = await getUser(clinic.ownerId);
-      changeUserStatus(user._id, !disabled);  
+      await changeUserStatus(user._id, disabled);  
     }
     catch (e) {
       console.log(e.message);
-    }
+    }    
   };
 
   return (
@@ -82,16 +90,14 @@ export default function ClinicList() {
           </TableHead>
 
           <TableBody>
-            {clinics &&
+            {clinics && state &&
               clinics.map((row) => {
                 return (
                   <TableRow key={row._id}>
                     <TableCell>
                       <Switch
                         checked={state[row._id]||false} 
-                        onChange={(event) => {
-                          handleChange(event, row.disabled);
-                        }}
+                        onChange={handleChange}
                         name={row._id}
                       />
                     </TableCell>
