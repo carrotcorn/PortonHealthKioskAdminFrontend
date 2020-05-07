@@ -59,7 +59,6 @@ export default function CheckInFormFields(props) {
           active: configuredInputTypes.has(field.inputType),
         }))
       );
-  
     }
     catch (error) {
       console.log(error.message);

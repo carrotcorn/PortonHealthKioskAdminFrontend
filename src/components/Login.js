@@ -49,6 +49,7 @@ export default function Login() {
       setUser(user);
       history.push("/");
     } catch (e) {
+      window.alert(e.message);      
       console.log(e.message);
     }
   };

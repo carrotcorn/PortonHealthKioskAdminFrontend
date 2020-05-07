@@ -126,7 +126,7 @@ export default function AppointmentList() {
         name="appointmentTime"
         label="Next appointment"
         type="datetime-local"
-        defaultValue="2020-05-04T22:45"
+        defaultValue={Date.now()}
         className={classes.textField}
         InputLabelProps={{
           shrink: true,

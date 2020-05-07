@@ -1,5 +1,4 @@
-/* global Backend */
-import React, { useState, useEffect, setState } from "react";
+import React, { useState, useEffect } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
@@ -10,6 +9,13 @@ import TableRow from "@material-ui/core/TableRow";
 import Button from "@material-ui/core/Button";
 import Paper from "@material-ui/core/Paper";
 import Switch from "@material-ui/core/Switch";
+import { 
+  getClinics,
+  getClinic,  
+  getUser,
+  changeUserStatus,
+  getClinicByOwner
+} from "../utilities/API";
 
 const useStyles = makeStyles({
   table: {
@@ -19,41 +25,48 @@ const useStyles = makeStyles({
 
 export default function ClinicList() {
   const classes = useStyles();
+  const [clinics, setClinics] = useState([]);
+  const [state, setState] = useState();
 
-  const [listClinic, setClinic] = useState([]);
-  const [state, setState] = useState({
-    // toggle: false,
-  });
+  useEffect(() => {
+    const fetchClinics = async () => {
+      try {
+        const clinicsData = await getClinics();
 
-  async function getClinics() {
-    const BASE_URL = "http://localhost:7001";
+        clinicsData.forEach(clinic => {
+          (async () => {
+            const user = await getUser(clinic.ownerId);
+            clinic.disabled = user.disabled;
+          })();
+        });
 
-    const backend = new Backend(BASE_URL);
-    try {
-      const result = await backend.get("/public/clinic/find");
-      if (result.success) {
-        setClinic(result);
-        console.log("Clinics:", result);
-      } else {
-        window.alert(result.error.message);
+        setState(
+          clinicsData.map((clinic) => ({
+            [clinic._id]: clinic.disabled
+          }))
+        );
+  
+        setClinics(clinicsData);
+      } catch (e) {
+        console.log(e.message);
       }
-    } catch (e) {
-      console.log(e);
     }
-  }
+    
+    fetchClinics();
+  }, []); 
 
-  const disableClinic = (clinicId, event) => {
-    setState({
-      ...state,
-      // all activated buttons within object, "..." keeps the previous states within the object,
-      // so it doesnt rewrite the object evert time
-      // [clinicId]: event.target.value,
-      [clinicId]: event.target.checked,
-    });
-    console.log("P00p");
+  const handleChange = async (event, disabled) => {
+    setState({ ...state, [event.target.name]: event.target.checked });
+
+    try {
+      const clinic = await getClinic(event.target.name);
+      const user = await getUser(clinic.ownerId);
+      changeUserStatus(user._id, !disabled);  
+    }
+    catch (e) {
+      console.log(e.message);
+    }
   };
-
-  console.log(state);
 
   return (
     <div>
@@ -75,18 +88,17 @@ export default function ClinicList() {
           </TableHead>
 
           <TableBody>
-            {listClinic.result &&
-              listClinic.result.map((row) => {
+            {clinics &&
+              clinics.map((row) => {
                 return (
                   <TableRow key={row._id}>
-                    <TableCell padding='switch'>
+                    <TableCell>
                       <Switch
-                        checked={state[row._id]} //[] allows me to access the object dynamically
+                        checked={state[row._id] || false} 
                         onChange={(event) => {
-                          disableClinic(row._id, event);
+                          handleChange(event, row.disabled);
                         }}
-                        value={row._id}
-                        name='toggle'
+                        name={row._id}
                       />
                     </TableCell>
                     <TableCell component='th' scope='row'>
@@ -108,4 +120,3 @@ export default function ClinicList() {
     </div>
   );
 }
-
