@@ -77,6 +77,16 @@ export default function CheckInFormFields(props) {
     );
   };
 
+  useEffect(() => {
+    if (!state) return;
+
+    const checked = state.filter((field) => field.active);
+
+    if (checked.length > 0) {
+      setError(false);
+    }
+  }, [state]);
+
   const handleSubmit = async (event) => {
     event.preventDefault();
 
