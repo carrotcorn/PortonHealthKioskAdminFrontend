@@ -9,7 +9,7 @@ import IconButton from "@material-ui/core/IconButton";
 import List from "@material-ui/core/List";
 import MenuIcon from "@material-ui/icons/Menu";
 import HomeIcon from "@material-ui/icons/Home";
-import ExitToAppIcon from '@material-ui/icons/ExitToApp';
+import ExitToAppIcon from "@material-ui/icons/ExitToApp";
 import SettingsIcon from "@material-ui/icons/Settings";
 import AssignmentIcon from "@material-ui/icons/Assignment";
 import LocalHospitalIcon from "@material-ui/icons/LocalHospital";
@@ -76,10 +76,10 @@ const navLinks = [
   },
   {
     path: "/checkin",
-    name: "Checkin",
+    name: "Kiosk Configuration",
     roles: ["clinic"],
     icon: <SettingsIcon />,
-  }
+  },
 ];
 
 function Layout(props) {
@@ -87,7 +87,7 @@ function Layout(props) {
   const classes = useStyles();
   const theme = useTheme();
   const [mobileOpen, setMobileOpen] = React.useState(false);
-  const { user, Logout }  = useContext(UserContext);
+  const { user, Logout } = useContext(UserContext);
 
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
@@ -124,10 +124,7 @@ function Layout(props) {
   return (
     <div className={classes.root}>
       <CssBaseline />
-      <AppBar
-        position="fixed"
-        className={user ? classes.appBar : null}
-      >
+      <AppBar position="fixed" className={user ? classes.appBar : null}>
         <Toolbar>
           <IconButton
             color="inherit"
@@ -158,19 +155,25 @@ function Layout(props) {
               return (
                 <TableContainer>
                   <Table>
-            <TableHead>
-            <TableRow>
-              <TableCell> 
-                 <Typography variant="h5" gutterBottom>
-                  {title}
-                </Typography>
-            </TableCell>
-              <TableCell align='right'>{user && <><ExitToAppIcon /><Button onClick={()=> Logout()}>Logout</Button></>} 
-               </TableCell>
-            </TableRow>
-          </TableHead>   
-          </Table>       
-          </TableContainer>      
+                    <TableHead>
+                      <TableRow>
+                        <TableCell>
+                          <Typography variant="h5" gutterBottom>
+                            {title}
+                          </Typography>
+                        </TableCell>
+                        <TableCell align="right">
+                          {user && (
+                            <>
+                              <ExitToAppIcon />
+                              <Button onClick={() => Logout()}>Logout</Button>
+                            </>
+                          )}
+                        </TableCell>
+                      </TableRow>
+                    </TableHead>
+                  </Table>
+                </TableContainer>
               );
             }}
           </Route>
