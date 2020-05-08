@@ -8,13 +8,14 @@ import Layout from "./Layout";
 import { Route, Switch } from "react-router-dom";
 import { UserContext } from "./Contexts";
 import { getCurrentUser } from "./utilities/API";
-import { Typography } from "@material-ui/core";
+import { Typography, CircularProgress } from "@material-ui/core";
 import PrivateRoute from "./utilities/PrivateRoute";
 import { logout } from "./utilities/API";
 import { useHistory } from "react-router-dom";
 
 function App(props) {
   const [user, setUser] = useState();
+  const [loading, setLoading] = useState(true);
   const history = useHistory();
 
   useEffect(() => {
@@ -24,7 +25,8 @@ function App(props) {
         setUser(user);
       } catch (e) {
         console.log(e.message);
-      } 
+      }
+      setLoading(false);
     };
     fetchUser();
   }, []);
@@ -34,14 +36,17 @@ function App(props) {
       await logout();
       setUser(null);
       history.push("/");
-    }
-    catch (error) {
+    } catch (error) {
       console.log(error.message);
     }
   };
 
+  if (loading) {
+    return <CircularProgress />;
+  }
+
   return (
-    <UserContext.Provider value={{ user, setUser, Logout}}>
+    <UserContext.Provider value={{ user, setUser, Logout }}>
       <Layout>
         <Switch>
           <Route path="/login" component={Login} />
@@ -57,7 +62,7 @@ function App(props) {
           <PrivateRoute exact path="/checkin" roles={["clinic"]}>
             <Checkin />
           </PrivateRoute>
-          <PrivateRoute path="*" component={PageNotFound} />
+          <Route path="*" component={PageNotFound} />
         </Switch>
       </Layout>
     </UserContext.Provider>
