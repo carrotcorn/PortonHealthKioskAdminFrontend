@@ -8,10 +8,11 @@ import Layout from "./Layout";
 import { Route, Switch } from "react-router-dom";
 import { UserContext } from "./Contexts";
 import { getCurrentUser } from "./utilities/API";
-import { Typography, CircularProgress } from "@material-ui/core";
+import { Typography } from "@material-ui/core";
 import PrivateRoute from "./utilities/PrivateRoute";
 import { logout } from "./utilities/API";
 import { useHistory } from "react-router-dom";
+import LoadingScreen from "./utilities/LoadingScreen";
 
 function App(props) {
   const [user, setUser] = useState();
@@ -42,7 +43,7 @@ function App(props) {
   };
 
   if (loading) {
-    return <CircularProgress />;
+    return <LoadingScreen />;
   }
 
   return (

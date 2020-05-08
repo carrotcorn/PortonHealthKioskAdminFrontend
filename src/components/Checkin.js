@@ -12,7 +12,8 @@ import {
   getCurrentUser,
   getClinicByOwner,
 } from "../utilities/API";
-import { CircularProgress, Paper } from "@material-ui/core";
+import { Paper } from "@material-ui/core";
+import LoadingScreen from "../utilities/LoadingScreen";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -39,34 +40,29 @@ export default function CheckInFormFields(props) {
     // TODO: consider moving this logic to the api/backend
     let fields;
     let userFields;
-    let configuredInputTypes;
 
     (async () => {
-    try {
-      const user = await getCurrentUser();
-      const clinic = await getClinicByOwner(user._id);
-      setClinic(clinic);
-      userFields = clinic.formFields || [];      
-      let configuredInputTypes = new Set();
-      for (let userField of userFields) {
-        configuredInputTypes.add(userField.inputType);
+      try {
+        const user = await getCurrentUser();
+        const clinic = await getClinicByOwner(user._id);
+        setClinic(clinic);
+        userFields = clinic.formFields || [];
+        let configuredInputTypes = new Set();
+        for (let userField of userFields) {
+          configuredInputTypes.add(userField.inputType);
+        }
+        fields = (await getAllCheckInFields()) || [];
+
+        setState(
+          fields.map((field) => ({
+            ...field,
+            active: configuredInputTypes.has(field.inputType),
+          }))
+        );
+      } catch (error) {
+        console.log(error.message);
       }
-      fields = await getAllCheckInFields() || [];
-
-      setState(
-        fields.map((field) => ({
-          ...field,
-          active: configuredInputTypes.has(field.inputType),
-        }))
-      );
-    }
-    catch (error) {
-      console.log(error.message);
-    }
-
     })();
-
-
   }, []);
 
   const handleChange = (event) => {
@@ -90,11 +86,11 @@ export default function CheckInFormFields(props) {
     }
 
     try {
-      await setUserCheckInFields(clinic, 
+      await setUserCheckInFields(
+        clinic,
         checked.map(({ _id }) => ({ _id }))
       );
-    }
-    catch (e) {
+    } catch (e) {
       console.log(e.message);
     }
   };
@@ -105,7 +101,7 @@ export default function CheckInFormFields(props) {
         <FormControl
           required
           error={error}
-          component='fieldset'
+          component="fieldset"
           className={classes.checkboxes}
         >
           <FormGroup>
@@ -126,12 +122,12 @@ export default function CheckInFormFields(props) {
           </FormGroup>
           {error && <FormHelperText>Select at least one.</FormHelperText>}
         </FormControl>
-        <Button type='submit' variant='contained' color='primary'>
+        <Button type="submit" variant="contained" color="primary">
           Save Preferences
         </Button>
       </form>
     </Paper>
   ) : (
-    <CircularProgress />
+    <LoadingScreen />
   );
 }
