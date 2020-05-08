@@ -14,6 +14,7 @@ import {
 } from "../utilities/API";
 import { Paper } from "@material-ui/core";
 import LoadingScreen from "../utilities/LoadingScreen";
+import SimpleSnackbar from "../utilities/SimpleSnackbar";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -35,6 +36,7 @@ export default function CheckInFormFields(props) {
   const [state, setState] = React.useState();
   const [error, setError] = React.useState(false);
   const [clinic, setClinic] = React.useState({});
+  const [snackbarOpen, setSnackbarOpen] = React.useState(false);
 
   useEffect(() => {
     // TODO: consider moving this logic to the api/backend
@@ -90,43 +92,51 @@ export default function CheckInFormFields(props) {
         clinic,
         checked.map(({ _id }) => ({ _id }))
       );
+
+      setSnackbarOpen(true);
+      setTimeout(() => {
+        setSnackbarOpen(false);
+      }, 3000);
     } catch (e) {
       console.log(e.message);
     }
   };
 
   return state ? (
-    <Paper className={classes.root}>
-      <form onSubmit={handleSubmit} className={classes.form}>
-        <FormControl
-          required
-          error={error}
-          component="fieldset"
-          className={classes.checkboxes}
-        >
-          <FormGroup>
-            {state.map(({ _id, inputType, name, label, active }) => (
-              <FormControlLabel
-                control={
-                  <Checkbox
-                    checked={active}
-                    onChange={handleChange}
-                    name={name}
-                    _id={_id}
-                  />
-                }
-                label={label}
-                key={inputType}
-              />
-            ))}
-          </FormGroup>
-          {error && <FormHelperText>Select at least one.</FormHelperText>}
-        </FormControl>
-        <Button type="submit" variant="contained" color="primary">
-          Save Preferences
-        </Button>
-      </form>
-    </Paper>
+    <>
+      <Paper className={classes.root}>
+        <form onSubmit={handleSubmit} className={classes.form}>
+          <FormControl
+            required
+            error={error}
+            component="fieldset"
+            className={classes.checkboxes}
+          >
+            <FormGroup>
+              {state.map(({ _id, inputType, name, label, active }) => (
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      checked={active}
+                      onChange={handleChange}
+                      name={name}
+                      _id={_id}
+                    />
+                  }
+                  label={label}
+                  key={inputType}
+                />
+              ))}
+            </FormGroup>
+            {error && <FormHelperText>Select at least one.</FormHelperText>}
+          </FormControl>
+          <Button type="submit" variant="contained" color="primary">
+            Save Preferences
+          </Button>
+        </form>
+      </Paper>
+      <SimpleSnackbar open={snackbarOpen} />
+    </>
   ) : (
     <LoadingScreen />
   );
