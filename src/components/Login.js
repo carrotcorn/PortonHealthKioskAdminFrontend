@@ -44,12 +44,12 @@ export default function Login() {
 
   const onSubmit = async ({ username, password }, setUser) => {
     try {
-      await auth({username, password});
+      await auth({ username, password });
       const user = await getCurrentUser();
       setUser(user);
       history.push("/");
     } catch (e) {
-      window.alert(e.message);      
+      window.alert(e.message);
       console.log(e.message);
     }
   };
@@ -62,7 +62,7 @@ export default function Login() {
             <LockOutlinedIcon />
           </Avatar>
           <Typography component="h1" variant="h5">
-            Clinic Credentials
+            Administrator Login
           </Typography>
           <form
             className={classes.form}
