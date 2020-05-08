@@ -9,6 +9,9 @@ import TableCell from "@material-ui/core/TableCell";
 import TableContainer from "@material-ui/core/TableContainer";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
+import TablePagination from '@material-ui/core/TablePagination';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import Switch from '@material-ui/core/Switch';
 import Paper from "@material-ui/core/Paper";
 import { useForm } from "react-hook-form";
 import { format } from "date-fns";
@@ -38,6 +41,9 @@ export default function AppointmentList() {
   const [appointments, setAppointments] = useState([]);
   const { user }  = useContext(UserContext);
   const { register, handleSubmit } = useForm();
+  const [page, setPage] = React.useState(0);
+  const [rowsPerPage, setRowsPerPage] = React.useState(5);
+  const [dense, setDense] = React.useState(false);
 
   async function fetchAppointments() {
     try {
@@ -72,6 +78,7 @@ export default function AppointmentList() {
 
   const onSubmit = async ({ appointmentTime }) => {
     filterAppointments(appointmentTime);
+    emptyRows = rowsPerPage - Math.min(rowsPerPage, appointments.length - page * rowsPerPage);
   };
 
   const sortByTime = () => {
@@ -114,6 +121,21 @@ export default function AppointmentList() {
     setAppointments(newAppointments);
   };
 
+  const handleChangePage = (event, newPage) => {
+    setPage(newPage);
+  };
+
+  const handleChangeDense = (event) => {
+    setDense(event.target.checked);
+  };
+
+  const handleChangeRowsPerPage = (event) => {
+    setRowsPerPage(parseInt(event.target.value, 10));
+    setPage(0);
+  };
+
+  var emptyRows = rowsPerPage - Math.min(rowsPerPage, appointments.length - page * rowsPerPage);
+
   return (
     <>
     <form 
@@ -154,7 +176,7 @@ export default function AppointmentList() {
 
     </form>
     <TableContainer component={Paper}>
-      <Table className={classes.table} size='small' aria-label='a dense table'>
+      <Table className={classes.table} size={dense ? 'small' : 'medium'} aria-label='a dense table'>
         <TableHead>
           <TableRow>
             <TableCell><a href="#" onClick={()=>sortByTime()}>Start Time</a></TableCell>
@@ -168,7 +190,9 @@ export default function AppointmentList() {
         </TableHead>
         <TableBody>
           {appointments &&
-            appointments.map((row) => {
+            appointments
+            .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+            .map((row) => {
               return (
                 //this return in necessary  TO ADD INFORMATION IN A CHILD JSON, DO ROW."OBJECT"."CHILDOBJECT"
                 <TableRow key={row._id}>
@@ -195,9 +219,27 @@ export default function AppointmentList() {
                 </TableRow>
               );
             })}
+            {emptyRows > 0 && (
+                <TableRow style={{ height: (dense ? 33 : 53) * emptyRows }}>
+                  <TableCell colSpan={6} />
+                </TableRow>
+              )}            
         </TableBody>
       </Table>
     </TableContainer>
+    <TablePagination
+          rowsPerPageOptions={[5, 10, 25]}
+          component="div"
+          count={appointments.length}
+          rowsPerPage={rowsPerPage}
+          page={page}
+          onChangePage={handleChangePage}
+          onChangeRowsPerPage={handleChangeRowsPerPage}
+        />
+      <FormControlLabel
+        control={<Switch checked={dense||false} onChange={handleChangeDense} />}
+        label="Dense padding"
+      />        
     </>
   );
 }
